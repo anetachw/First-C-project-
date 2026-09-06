@@ -11,8 +11,11 @@ struct studentas{
     int exam;
     };
     
-void printas(studentas A);
-double galutinis_vid(studentas A);
+void printas(studentas &A);
+double galutinis_vid(studentas &A);
+double mediana(std::vector<int> paz);
+double galutinis_med(studentas &A);
+
 
 int main(){
     std::vector<studentas>grupe; 
@@ -44,26 +47,53 @@ int main(){
     A.paz.clear();
     }
     
-    std::cout << "Studento duomenys: \n";
-    std::cout << std::string(40, '-') << '\n';
+    std::cout << "Studentu duomenys: \n";
+    std::cout << std::string(57, '-') << '\n';
     std::cout << "|" << std::left << std::setw(10) << "Vardas" 
               << "|" << std::left << std::setw(10) << "Pavarde" 
-              << "|" << std::left << std::setw(16) << "Galutinis (Vid.)" << "|\n";
-    std::cout << std::string(40, '-') << '\n';
-    for(studentas B:grupe) printas(B);
-    std::cout << std::string(40, '-') << '\n';
+              << "|" << std::left << std::setw(16) << "Galutinis (Vid.)"
+              << "|" << std::left << std::setw(16) << "Galutinis (Med.)"<< "|\n";
+    std::cout << std::string(57, '-') << '\n';
+    for(studentas &B:grupe) printas(B);
+    std::cout << std::string(57, '-') << '\n';
 }
 
-void printas(studentas A){
+void printas(studentas &A){
     std::cout << "|" << std::left << std::setw(10) << A.vardas 
               << "|" << std::left << std::setw(10) << A.pavarde << "|"
-              << std::right << std::setw(16) << std::setprecision(2)
-              << galutinis_vid(A) << "|\n";
+              << std::left << std::setw(16) << std::setprecision(2)<< galutinis_vid(A) << "|"
+              << std::left << std::setw(16) << std::setprecision(2)<< galutinis_med(A)<<  "|\n";
 };
 
-double galutinis_vid(studentas A){
+double galutinis_vid(studentas &A){
+    if (A.paz.empty()){
+        return 0.6 * A.exam;
+    }
     double suma = std::accumulate(A.paz.begin(), A.paz.end(), 0.0);
     double vidurkis = suma / A.paz.size();
 
     return 0.4 * vidurkis + 0.6 * A.exam;
+};
+
+double mediana(std::vector<int> paz){
+    if (paz.empty()) return 0.0;
+
+    std::sort(paz.begin(), paz.end());
+    int n = paz.size();
+
+    if (n % 2 != 0){
+        return paz[n / 2];
+    }
+    else{
+        return (paz[(n-1) / 2] + paz[n / 2]) / 2.0;
+    }
+}; 
+
+double galutinis_med(studentas &A){
+    if (A.paz.empty()){
+        return 0.6 * A.exam;
+    }
+    double med = mediana(A.paz);
+    
+    return 0.4 * med + 0.6 * A.exam;
 }
