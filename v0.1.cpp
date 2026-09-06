@@ -26,22 +26,54 @@ int main(){
     std::cin >> n;
 
     for(int j=0; j < n; j++){
-        std::cout << "Iveskite per tarpa studentu varda ir pavarde: ";
+        std::cout << "Iveskite per tarpa studento varda ir pavarde: ";
         std::cin >> A.vardas >> A.pavarde;
-        std::cout << "Iveskite semestro pazymiu kieki: ";
-        std::cin >> k;
-        
-        for (int i = 0; i < k; i++){
-            //std::cin >> A.paz[i];
-            std::cout << "Iveskite #" << i+1 << " pazymi: ";
-            int a;
-            std::cin >> a;
-            A.paz.push_back(a);
-        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        std::string input1;
+        std::cout << "Iveskite namu darbu pazymius.\n";
+        std::cout << "Palikite tusia ir spauskite ENTER, kad bagti.\n";
+        int i = 1;
+
+        do {
+            std::cout << "Iveskite #" << i << " pazymi: ";
+            std::getline(std::cin, input1);
+            if (!input1.empty()){
+                try {
+                    int a = std::stoi(input1);
+                    if (a >= 1 && a <= 10){
+                        A.paz.push_back(a);
+                        i++;
+                    }
+                    else {
+                        std::cout << "Klaida! Pazymis turi buti nuo 1 iki 10. Bandykite dar karta.";
+                    }
+                }
+                catch (...){
+                    std::cout << "Klaida! Ivedete ne skaiciu, bandykite dar karta. \n";
+                }
+            }     
+        } while(!input1.empty());
     
-    std::cout << "Iveskite egzamino pazymi: ";
-    std::cin >> A.exam;
-    grupe.push_back(A);
+    std::string input2;
+    while (true) {
+        std::cout << "Iveskite egzamino pazymi: ";
+        std::getline(std::cin, input2);
+
+        try{
+            A.exam = std::stoi(input2);
+            if (A.exam >= 1 && A.exam <= 10){
+                grupe.push_back(A);
+                break;
+            }
+            else {
+                std::cout << "Klaida! Pazymis turi buti nuo 1 iki 10.\n";
+            }
+        } catch (...) {
+            std::cout << "Klaida! Ivedete ne skaiciu, bandykite dar karta. \n";
+        }
+    }
+
     A.pavarde.clear();
     A.vardas.clear();
     A.paz.clear();
