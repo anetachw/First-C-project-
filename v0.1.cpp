@@ -1,8 +1,9 @@
-// Pratybu programa 
+// student managment program
 #include <iostream>
 #include <iomanip>
 #include <string>
 #include <vector>
+#include <numeric>
 
 struct studentas{
     std::string vardas, pavarde;
@@ -11,6 +12,7 @@ struct studentas{
     };
     
 void printas(studentas A);
+double galutinis_vid(studentas A);
 
 int main(){
     std::vector<studentas>grupe; 
@@ -19,6 +21,7 @@ int main(){
     std::cout << "Iveskite studentu kieki: ";
     int n;
     std::cin >> n;
+
     for(int j=0; j < n; j++){
         std::cout << "Iveskite per tarpa studentu varda ir pavarde: ";
         std::cin >> A.vardas >> A.pavarde;
@@ -27,7 +30,7 @@ int main(){
         
         for (int i = 0; i < k; i++){
             //std::cin >> A.paz[i];
-            std::cout << "Iveskite " << i+1 << " pazymi: ";
+            std::cout << "Iveskite #" << i+1 << " pazymi: ";
             int a;
             std::cin >> a;
             A.paz.push_back(a);
@@ -42,12 +45,25 @@ int main(){
     }
     
     std::cout << "Studento duomenys: \n";
+    std::cout << std::string(40, '-') << '\n';
+    std::cout << "|" << std::left << std::setw(10) << "Vardas" 
+              << "|" << std::left << std::setw(10) << "Pavarde" 
+              << "|" << std::left << std::setw(16) << "Galutinis (Vid.)" << "|\n";
+    std::cout << std::string(40, '-') << '\n';
     for(studentas B:grupe) printas(B);
+    std::cout << std::string(40, '-') << '\n';
 }
 
 void printas(studentas A){
-    std::cout << "|" << std::left << std::setw(10) << A.vardas << "|" << std::left << std::setw(10) << A.pavarde << "|";
-    for(int p: A.paz)
-    std::cout << std::right << std::setw(3) << p << "|";
-    std::cout << std::right << std::setw(5) << "|\n";
+    std::cout << "|" << std::left << std::setw(10) << A.vardas 
+              << "|" << std::left << std::setw(10) << A.pavarde << "|"
+              << std::right << std::setw(16) << std::setprecision(2)
+              << galutinis_vid(A) << "|\n";
+};
+
+double galutinis_vid(studentas A){
+    double suma = std::accumulate(A.paz.begin(), A.paz.end(), 0.0);
+    double vidurkis = suma / A.paz.size();
+
+    return 0.4 * vidurkis + 0.6 * A.exam;
 }
