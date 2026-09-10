@@ -15,6 +15,7 @@ void printas(studentas &A);
 double galutinis_vid(studentas &A);
 double mediana(std::vector<int> paz);
 double galutinis_med(studentas &A);
+std::vector<int> generuoti_paz(studentas &A, int count);
 
 
 int main(){
@@ -30,6 +31,24 @@ int main(){
         std::cin >> A.vardas >> A.pavarde;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
+        std::cout << "Iveskite kiek namu darbu pazymiu norite sugeneruoti: ";
+        int kiekis;
+        std::cin >> kiekis;
+
+        generuoti_paz(A, kiekis);
+        std::cout << "Pazymiai: ";
+        for ( int p: A.paz) {
+            std::cout << p << " ";
+        }
+        std::cout << '\n';
+
+        A.exam = (rand() % 10) + 1;
+        grupe.push_back(A);
+        std::cout << "Egzamino rezultatas: " << A.exam << '\n';
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+
+/*
         std::string input1;
         std::cout << "Iveskite namu darbu pazymius.\n";
         std::cout << "Palikite tusia ir spauskite ENTER, kad bagti.\n";
@@ -54,7 +73,7 @@ int main(){
                 }
             }     
         } while(!input1.empty());
-    
+
     std::string input2;
     while (true) {
         std::cout << "Iveskite egzamino pazymi: ";
@@ -73,13 +92,13 @@ int main(){
             std::cout << "Klaida! Ivedete ne skaiciu, bandykite dar karta. \n";
         }
     }
-
+*/
     A.pavarde.clear();
     A.vardas.clear();
     A.paz.clear();
     }
     
-    std::cout << "Studentu duomenys: \n";
+    std::cout << '\n' << "Studentu duomenys: \n";
     std::cout << std::string(57, '-') << '\n';
     std::cout << "|" << std::left << std::setw(10) << "Vardas" 
               << "|" << std::left << std::setw(10) << "Pavarde" 
@@ -128,4 +147,15 @@ double galutinis_med(studentas &A){
     double med = mediana(A.paz);
     
     return 0.4 * med + 0.6 * A.exam;
+};
+
+std::vector<int> generuoti_paz(studentas &A, int count){
+    srand(time(NULL));
+
+    for(int i = 1; i <= count; i++){
+        int num = (rand() % 10) + 1;
+        A.paz.push_back(num);
+    }
+
+    return A.paz;
 }
