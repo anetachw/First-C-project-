@@ -1,4 +1,4 @@
-// student managment program
+// student management program
 #include <iostream>
 #include <iomanip>
 #include <string>
