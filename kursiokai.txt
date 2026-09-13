@@ -1,5 +1,5 @@
 Vardas      Pavardė      ND1   ND2   ND3   ND4   ND5   Egzaminas
 Jonas       Jonaitis     8     7     7     5     9     8
-Monika      Keselytė     6     8     10    9     7     9
+Monika      Keselyte     6     8     10    9     7     9
 Romas       Jasaitis     10    9     10    7     8     10
-Karolina    Gražulytė    7     4     6     9     7     6
+Karolina    Grazulyte    7     4     6     9     7     6

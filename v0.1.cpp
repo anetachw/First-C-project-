@@ -1,9 +1,11 @@
-// student management program
+// studentu valdymo programa
 #include <iostream>
 #include <iomanip>
 #include <string>
 #include <vector>
 #include <numeric>
+#include <fstream>
+#include <sstream>
 
 
 struct studentas{
@@ -21,6 +23,7 @@ void rodyti_meniu();
 void rodyti_lentele(std::vector<studentas> &grupe);
 void rankine_ivestis(std::vector<studentas> &grupe, studentas &A);
 void automatine_ivestis(std::vector<studentas> &grupe, studentas &A);
+void failo_nuskaitymas(std::vector<studentas> &grupe, studentas &A, std::string failoPavadinimas);
 
 
 int main(){
@@ -42,6 +45,14 @@ int main(){
                 automatine_ivestis(grupe, A);
                 rodyti_lentele(grupe);
                 break;
+            case 3: {
+                std::cout << "Iveskite failo pavadinima: ";
+                std::string failas;
+                std::cin >> failas; 
+                failo_nuskaitymas(grupe, A, failas);
+                rodyti_lentele(grupe);
+                break;
+            }
             default:
                 std::cout << "Netinkamas pasirinkimas";
         }
@@ -104,6 +115,7 @@ void rodyti_meniu(){
     std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     std::cout << "1. Ivesti studentu duomenis rankiniu budu\n";
     std::cout << "2. Generuoti studentu pazymius atsitiktinai\n";
+    std::cout << "3. Nuskaityti duomenis is failo\n";
     std::cout << "0. Baigti darba\n";
     std::cout << "\nPasirinkite veiksma: ";
 };
@@ -208,4 +220,38 @@ void automatine_ivestis(std::vector<studentas> &grupe, studentas &A){
         A.vardas.clear();
         A.paz.clear();
     }
+};
+
+void failo_nuskaitymas(std::vector<studentas> &grupe, studentas &A, std::string failoPavadinimas){
+    std::ifstream f(failoPavadinimas);
+
+    if(!f.is_open()){
+        std::cout << "Nepavyko atidaryti failo " << failoPavadinimas << '\n';
+        return;
+    }
+    
+    std::string tekstas;
+
+    std::getline (f, tekstas);
+    while(std::getline(f, tekstas)){
+        std::stringstream ss(tekstas);
+        
+        ss >> A.vardas >> A.pavarde;
+
+        int skaicius;
+        std::vector<int> visiSkaiciai;
+        while (ss >> skaicius){
+            visiSkaiciai.push_back(skaicius);
+        }
+
+        if (!visiSkaiciai.empty()){
+            A.exam = visiSkaiciai.back();
+            visiSkaiciai.pop_back();
+            A.paz = visiSkaiciai;
+        }
+
+        grupe.push_back(A);
+    }
+
+    f.close();
 }
