@@ -6,6 +6,7 @@
 #include <numeric>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 
 struct studentas{
@@ -24,7 +25,7 @@ void rodyti_lentele(std::vector<studentas> &grupe);
 void rankine_ivestis(std::vector<studentas> &grupe);
 void automatine_ivestis(std::vector<studentas> &grupe);
 void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinimas);
-
+void rusiavimas(std::vector<studentas> &grupe);
 
 int main(){
     srand(time(NULL));
@@ -38,10 +39,12 @@ int main(){
         switch(pasirinkimas){
             case 1:
                 rankine_ivestis(grupe);
+                rusiavimas(grupe);
                 rodyti_lentele(grupe);
                 break;
             case 2:
                 automatine_ivestis(grupe);
+                rusiavimas(grupe);
                 rodyti_lentele(grupe);
                 break;
             case 3: {
@@ -49,6 +52,7 @@ int main(){
                 std::string failas;
                 std::cin >> failas; 
                 failo_nuskaitymas(grupe, failas);
+                rusiavimas(grupe);
                 rodyti_lentele(grupe);
                 break;
             }
@@ -251,6 +255,16 @@ void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinim
 
         grupe.push_back(tempStudentas);
     }
-    
+
     f.close();
+};
+
+void rusiavimas(std::vector<studentas> &grupe){
+    std::sort(grupe.begin(), grupe.end(),
+        [](const studentas &a, const studentas &b){
+            if (a.pavarde != b.pavarde){
+                return a.pavarde < b.pavarde;
+            }
+            return a.vardas < b.vardas;
+    });
 }
