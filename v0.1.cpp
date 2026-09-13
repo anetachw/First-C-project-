@@ -46,7 +46,7 @@ int main(){
                 rodyti_lentele(grupe);
                 break;
             case 3: {
-                std::cout << "Iveskite failo pavadinima: ";
+                std::cout << "Įveskite failo pavadinimą: ";
                 std::string failas;
                 std::cin >> failas; 
                 failo_nuskaitymas(grupe, A, failas);
@@ -55,6 +55,7 @@ int main(){
             }
             default:
                 std::cout << "Netinkamas pasirinkimas";
+                break;
         }
 
     } while(pasirinkimas != 0);
@@ -62,8 +63,8 @@ int main(){
 };
 
 void printas(studentas &A){
-    std::cout << "|" << std::left << std::setw(10) << A.vardas 
-              << "|" << std::left << std::setw(10) << A.pavarde << "|"
+    std::cout << "|" << std::left << std::setw(14) << A.vardas 
+              << "|" << std::left << std::setw(16) << A.pavarde << "|"
               << std::left << std::setw(16) << std::setprecision(2)<< galutinis_vid(A) << "|"
               << std::left << std::setw(16) << std::setprecision(2)<< galutinis_med(A)<<  "|\n";
 };
@@ -110,45 +111,46 @@ void generuoti_paz(studentas &A, int count){
 };
 
 void rodyti_meniu(){
-    std::cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-    std::cout << "         STUDENTU VALDYMO MENIU\n";
-    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-    std::cout << "1. Ivesti studentu duomenis rankiniu budu\n";
-    std::cout << "2. Generuoti studentu pazymius atsitiktinai\n";
-    std::cout << "3. Nuskaityti duomenis is failo\n";
-    std::cout << "0. Baigti darba\n";
+    std::cout << "\n------------------------------------------------\n";
+    std::cout << "|           STUDENTŲ VALDYMO SISTEMA           |\n";
+    std::cout << "------------------------------------------------\n";
+    std::cout << "| 1. Įvesti studentų duomenis rankiniu būdu    |\n";
+    std::cout << "| 2. Generuoti studentų pažymius atsitiktinai  |\n";
+    std::cout << "| 3. Nuskaityti duomenis iš failo              |\n";
+    std::cout << "| 0. Baigti darbą                              |\n";
+    std::cout << "------------------------------------------------\n";
     std::cout << "\nPasirinkite veiksma: ";
 };
 
 void rodyti_lentele(std::vector<studentas> &grupe){
     std::cout << '\n' << "Studentu duomenys: \n";
-    std::cout << std::string(57, '-') << '\n';
-    std::cout << "|" << std::left << std::setw(10) << "Vardas" 
-              << "|" << std::left << std::setw(10) << "Pavarde" 
+    std::cout << std::string(67, '-') << '\n';
+    std::cout << "|" << std::left << std::setw(14) << "Vardas" 
+              << "|" << std::left << std::setw(16) << "Pavarde" 
               << "|" << std::left << std::setw(16) << "Galutinis (Vid.)"
               << "|" << std::left << std::setw(16) << "Galutinis (Med.)"<< "|\n";
-    std::cout << std::string(57, '-') << '\n';
+    std::cout << std::string(67, '-') << '\n';
     for(studentas &B:grupe) printas(B);
-    std::cout << std::string(57, '-') << '\n';
+    std::cout << std::string(67, '-') << '\n';
 };
 
 void rankine_ivestis(std::vector<studentas> &grupe, studentas &A){
-    std::cout << "Iveskite studentu kieki: ";
+    std::cout << "Įveskite studentų kiekį: ";
     int n;
     std::cin >> n;
 
     for(int j=0; j < n; j++){
-        std::cout << "Iveskite per tarpa studento varda ir pavarde: ";
+        std::cout << "Įveskite per tarpa studento vardą ir pavardę: ";
         std::cin >> A.vardas >> A.pavarde;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         std::string input1;
-        std::cout << "Iveskite namu darbu pazymius.\n";
-        std::cout << "Palikite tusia ir spauskite ENTER, kad testi.\n";
+        std::cout << "Įveskite namų darbų pažymius.\n";
+        std::cout << "Palikite tuščia ir spauskite ENTER, kad tęsti.\n";
         int i = 1;
 
         do {
-            std::cout << "Iveskite #" << i << " pazymi: ";
+            std::cout << "Įveskite #" << i << " pažymį: ";
             std::getline(std::cin, input1);
             if (!input1.empty()){
                 try {
@@ -158,18 +160,18 @@ void rankine_ivestis(std::vector<studentas> &grupe, studentas &A){
                         i++;
                     }
                     else {
-                        std::cout << "Klaida! Pazymis turi buti nuo 1 iki 10.\n";
+                        std::cout << "Klaida! Pažymis turi būti nuo 1 iki 10.\n";
                     }
                 }
                 catch (...){
-                    std::cout << "Klaida! Ivedete ne skaiciu, bandykite dar karta.\n";
+                    std::cout << "Klaida! Ivedėte ne skaičių, bandykite dar karta.\n";
                 }
             }     
         } while(!input1.empty());
 
         std::string input2;
         while (true) {
-            std::cout << "Iveskite egzamino pazymi: ";
+            std::cout << "Įveskite egzamino pažymį: ";
             std::getline(std::cin, input2);
 
             try{
@@ -179,10 +181,10 @@ void rankine_ivestis(std::vector<studentas> &grupe, studentas &A){
                     break;
                 }
                 else {
-                    std::cout << "Klaida! Pazymis turi buti nuo 1 iki 10.\n";
+                    std::cout << "Klaida! Pažymis turi būti nuo 1 iki 10.\n";
                 }
             } catch (...) {
-                std::cout << "Klaida! Ivedete ne skaiciu, bandykite dar karta.\n";
+                std::cout << "Klaida! Ivedėte ne skaičių, bandykite dar karta.\n";
             }
         }
 
@@ -194,26 +196,26 @@ void rankine_ivestis(std::vector<studentas> &grupe, studentas &A){
 };
 
 void automatine_ivestis(std::vector<studentas> &grupe, studentas &A){
-    std::cout << "Iveskite studentu kieki: ";
+    std::cout << "Įveskite studentų kiekį: ";
     int n;
     std::cin >> n;
 
     for(int j=0; j < n; j++){
-        std::cout << "Iveskite per tarpa studento varda ir pavarde: ";
+        std::cout << "Įveskite per tarpa studento vardą ir pavardę: ";
         std::cin >> A.vardas >> A.pavarde;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        std::cout << "Iveskite kiek namu darbu pazymiu norite sugeneruoti: ";
+        std::cout << "Įveskite kiek namų darbų pažymių norite sugeneruoti: ";
         int kiekis;
         std::cin >> kiekis;
         generuoti_paz(A, kiekis);
 
-        std::cout << "Namu darbu pazymiai: ";
+        std::cout << "Namų darbų pažymiai: ";
         for ( int p: A.paz) {
             std::cout << p << " ";
         }
         std::cout << '\n';
-        std::cout << "Egzamino pazymis: " << A.exam << '\n';
+        std::cout << "Egzamino pažymis: " << A.exam << '\n';
         grupe.push_back(A);
 
         A.pavarde.clear();
