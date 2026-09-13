@@ -14,22 +14,21 @@ struct studentas{
     int exam;
     };
     
-void printas(studentas &A);
-double galutinis_vid(studentas &A);
+void printas(const studentas &A);
+double galutinis_vid(const studentas &A);
 double mediana(std::vector<int> paz);
-double galutinis_med(studentas &A);
+double galutinis_med(const studentas &A);
 void generuoti_paz(studentas &A, int count);
 void rodyti_meniu();
 void rodyti_lentele(std::vector<studentas> &grupe);
-void rankine_ivestis(std::vector<studentas> &grupe, studentas &A);
-void automatine_ivestis(std::vector<studentas> &grupe, studentas &A);
-void failo_nuskaitymas(std::vector<studentas> &grupe, studentas &A, std::string failoPavadinimas);
+void rankine_ivestis(std::vector<studentas> &grupe);
+void automatine_ivestis(std::vector<studentas> &grupe);
+void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinimas);
 
 
 int main(){
     srand(time(NULL));
     std::vector<studentas>grupe; 
-    studentas A;
     int pasirinkimas;
 
     do{
@@ -38,18 +37,18 @@ int main(){
 
         switch(pasirinkimas){
             case 1:
-                rankine_ivestis(grupe, A);
+                rankine_ivestis(grupe);
                 rodyti_lentele(grupe);
                 break;
             case 2:
-                automatine_ivestis(grupe, A);
+                automatine_ivestis(grupe);
                 rodyti_lentele(grupe);
                 break;
             case 3: {
                 std::cout << "Įveskite failo pavadinimą: ";
                 std::string failas;
                 std::cin >> failas; 
-                failo_nuskaitymas(grupe, A, failas);
+                failo_nuskaitymas(grupe, failas);
                 rodyti_lentele(grupe);
                 break;
             }
@@ -62,14 +61,14 @@ int main(){
 
 };
 
-void printas(studentas &A){
+void printas(const studentas &A){
     std::cout << "|" << std::left << std::setw(14) << A.vardas 
               << "|" << std::left << std::setw(16) << A.pavarde << "|"
               << std::left << std::setw(16) << std::setprecision(2)<< galutinis_vid(A) << "|"
               << std::left << std::setw(16) << std::setprecision(2)<< galutinis_med(A)<<  "|\n";
 };
 
-double galutinis_vid(studentas &A){
+double galutinis_vid(const studentas &A){
     if (A.paz.empty()){
         return 0.6 * A.exam;
     }
@@ -93,7 +92,7 @@ double mediana(std::vector<int> paz){
     }
 }; 
 
-double galutinis_med(studentas &A){
+double galutinis_med(const studentas &A){
     if (A.paz.empty()){
         return 0.6 * A.exam;
     }
@@ -134,14 +133,16 @@ void rodyti_lentele(std::vector<studentas> &grupe){
     std::cout << std::string(67, '-') << '\n';
 };
 
-void rankine_ivestis(std::vector<studentas> &grupe, studentas &A){
+void rankine_ivestis(std::vector<studentas> &grupe){
     std::cout << "Įveskite studentų kiekį: ";
     int n;
     std::cin >> n;
 
     for(int j=0; j < n; j++){
+        studentas tempStudentas;
+
         std::cout << "Įveskite per tarpa studento vardą ir pavardę: ";
-        std::cin >> A.vardas >> A.pavarde;
+        std::cin >> tempStudentas.vardas >> tempStudentas.pavarde;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         std::string input1;
@@ -156,7 +157,7 @@ void rankine_ivestis(std::vector<studentas> &grupe, studentas &A){
                 try {
                     int a = std::stoi(input1);
                     if (a >= 1 && a <= 10){
-                        A.paz.push_back(a);
+                        tempStudentas.paz.push_back(a);
                         i++;
                     }
                     else {
@@ -175,9 +176,8 @@ void rankine_ivestis(std::vector<studentas> &grupe, studentas &A){
             std::getline(std::cin, input2);
 
             try{
-                A.exam = std::stoi(input2);
-                if (A.exam >= 1 && A.exam <= 10){
-                    grupe.push_back(A);
+                tempStudentas.exam = std::stoi(input2);
+                if (tempStudentas.exam >= 1 && tempStudentas.exam <= 10){
                     break;
                 }
                 else {
@@ -187,44 +187,40 @@ void rankine_ivestis(std::vector<studentas> &grupe, studentas &A){
                 std::cout << "Klaida! Ivedėte ne skaičių, bandykite dar karta.\n";
             }
         }
-
-        A.pavarde.clear();
-        A.vardas.clear();
-        A.paz.clear();
+        grupe.push_back(tempStudentas);
     }
 
 };
 
-void automatine_ivestis(std::vector<studentas> &grupe, studentas &A){
+void automatine_ivestis(std::vector<studentas> &grupe){
     std::cout << "Įveskite studentų kiekį: ";
     int n;
     std::cin >> n;
 
     for(int j=0; j < n; j++){
+        studentas tempStudentas;
+
         std::cout << "Įveskite per tarpa studento vardą ir pavardę: ";
-        std::cin >> A.vardas >> A.pavarde;
+        std::cin >> tempStudentas.vardas >> tempStudentas.pavarde;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         std::cout << "Įveskite kiek namų darbų pažymių norite sugeneruoti: ";
         int kiekis;
         std::cin >> kiekis;
-        generuoti_paz(A, kiekis);
+        generuoti_paz(tempStudentas, kiekis);
 
         std::cout << "Namų darbų pažymiai: ";
-        for ( int p: A.paz) {
+        for ( int p: tempStudentas.paz) {
             std::cout << p << " ";
         }
         std::cout << '\n';
-        std::cout << "Egzamino pažymis: " << A.exam << '\n';
-        grupe.push_back(A);
-
-        A.pavarde.clear();
-        A.vardas.clear();
-        A.paz.clear();
+        std::cout << "Egzamino pažymis: " << tempStudentas.exam << '\n';
+        
+        grupe.push_back(tempStudentas);
     }
 };
 
-void failo_nuskaitymas(std::vector<studentas> &grupe, studentas &A, std::string failoPavadinimas){
+void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinimas){
     std::ifstream f(failoPavadinimas);
 
     if(!f.is_open()){
@@ -237,8 +233,9 @@ void failo_nuskaitymas(std::vector<studentas> &grupe, studentas &A, std::string 
     std::getline (f, tekstas);
     while(std::getline(f, tekstas)){
         std::stringstream ss(tekstas);
+        studentas tempStudentas;
         
-        ss >> A.vardas >> A.pavarde;
+        ss >> tempStudentas.vardas >> tempStudentas.pavarde;
 
         int skaicius;
         std::vector<int> visiSkaiciai;
@@ -247,13 +244,13 @@ void failo_nuskaitymas(std::vector<studentas> &grupe, studentas &A, std::string 
         }
 
         if (!visiSkaiciai.empty()){
-            A.exam = visiSkaiciai.back();
+            tempStudentas.exam = visiSkaiciai.back();
             visiSkaiciai.pop_back();
-            A.paz = visiSkaiciai;
+            tempStudentas.paz = visiSkaiciai;
         }
 
-        grupe.push_back(A);
+        grupe.push_back(tempStudentas);
     }
-
+    
     f.close();
 }
