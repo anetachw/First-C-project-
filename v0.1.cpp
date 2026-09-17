@@ -26,25 +26,16 @@ void rankine_ivestis(std::vector<studentas> &grupe);
 void automatine_ivestis(std::vector<studentas> &grupe);
 void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinimas);
 void rusiavimas(std::vector<studentas> &grupe);
+int ar_skaicius(std::string tekstas, int min, int max);
 
 int main(){
     srand(time(NULL));
     std::vector<studentas>grupe; 
     int pasirinkimas;
-    
 
     do{
         rodyti_meniu();
-        std::cout << "\nPasirinkite veiksma: ";
-        std::cin >> pasirinkimas; 
-
-        if(!std::cin >> pasirinkimas){
-            std::cout << "Klaida! Įvedėte netinkama skaičių.";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            pasirinkimas = -1;
-            continue;
-    }
+        pasirinkimas = ar_skaicius("\nPasirinkite veiksma (0-3): ", 0, 3);
 
         switch(pasirinkimas){
             case 0:
@@ -136,10 +127,10 @@ void rodyti_meniu(){
 };
 
 void rodyti_lentele(std::vector<studentas> &grupe){
-    std::cout << '\n' << "Studentu duomenys: \n";
+    std::cout << '\n' << "Studentų duomenys: \n";
     std::cout << std::string(67, '-') << '\n';
     std::cout << "|" << std::left << std::setw(14) << "Vardas" 
-              << "|" << std::left << std::setw(16) << "Pavarde" 
+              << "|" << std::left << std::setw(16) << "Pavardė" 
               << "|" << std::left << std::setw(16) << "Galutinis (Vid.)"
               << "|" << std::left << std::setw(16) << "Galutinis (Med.)"<< "|\n";
     std::cout << std::string(67, '-') << '\n';
@@ -148,14 +139,8 @@ void rodyti_lentele(std::vector<studentas> &grupe){
 };
 
 void rankine_ivestis(std::vector<studentas> &grupe){
-    std::cout << "Įveskite studentų kiekį: ";
     int n;
-
-    while(!(std::cin >> n) || n < 1){
-        std::cout << "Klaida! Įveskite tinkama skaičių: ";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    };
+    n = ar_skaicius("Įveskite studentų kiekį: ", 1, 100);
 
     for(int j=0; j < n; j++){
         studentas tempStudentas;
@@ -212,14 +197,8 @@ void rankine_ivestis(std::vector<studentas> &grupe){
 };
 
 void automatine_ivestis(std::vector<studentas> &grupe){
-    std::cout << "Įveskite studentų kiekį: ";
     int n;
-
-    while(!(std::cin >> n) || n < 1){
-        std::cout << "Klaida! Įveskite tinkama skaičių: ";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    };
+    n = ar_skaicius("Įveskite studentų kiekį: ", 1, 100);
 
     for(int j=0; j < n; j++){
         studentas tempStudentas;
@@ -227,14 +206,8 @@ void automatine_ivestis(std::vector<studentas> &grupe){
         std::cout << "Įveskite per tarpa studento vardą ir pavardę: ";
         std::cin >> tempStudentas.vardas >> tempStudentas.pavarde;
 
-        std::cout << "Įveskite kiek namų darbų pažymių norite sugeneruoti: ";
         int kiekis;
-        
-        while(!(std::cin >> kiekis) || kiekis < 1){
-            std::cout << "Klaida! Įveskite tinkama skaičių: ";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        };
+        kiekis = ar_skaicius("Įveskite kiek namų darbų pažymių norite sugeneruoti: ", 1, 10);
         generuoti_paz(tempStudentas, kiekis);
 
         std::cout << "Namų darbų pažymiai: ";
@@ -291,4 +264,19 @@ void rusiavimas(std::vector<studentas> &grupe){
             }
             return a.vardas < b.vardas;
     });
+};
+
+int ar_skaicius(std::string tekstas, int min, int max){
+    int skaicius;
+    while(true){
+        std::cout << tekstas;
+        if(std::cin >> skaicius && skaicius >= min && skaicius <= max){
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            return skaicius;
+        }
+
+        std::cout << "Klaida! Įveskite tinkama skaičių nuo " << min << " iki " << max << ".\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
 }
