@@ -31,12 +31,25 @@ int main(){
     srand(time(NULL));
     std::vector<studentas>grupe; 
     int pasirinkimas;
+    
 
     do{
         rodyti_meniu();
-        std::cin >> pasirinkimas;
+        std::cout << "\nPasirinkite veiksma: ";
+        std::cin >> pasirinkimas; 
+
+        if(!std::cin >> pasirinkimas){
+            std::cout << "Klaida! Įvedėte netinkama skaičių.";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            pasirinkimas = -1;
+            continue;
+    }
 
         switch(pasirinkimas){
+            case 0:
+                std::cout << "Baigiamas darbas\n";
+                break;
             case 1:
                 rankine_ivestis(grupe);
                 rusiavimas(grupe);
@@ -53,23 +66,21 @@ int main(){
                 std::cin >> failas; 
                 failo_nuskaitymas(grupe, failas);
                 rusiavimas(grupe);
-                rodyti_lentele(grupe);
+                if(!grupe.empty()){
+                    rodyti_lentele(grupe);
+                }
                 break;
-            }
-            default:
-                std::cout << "Netinkamas pasirinkimas";
-                break;
+                }
         }
 
     } while(pasirinkimas != 0);
-
 };
 
 void printas(const studentas &A){
     std::cout << "|" << std::left << std::setw(14) << A.vardas 
               << "|" << std::left << std::setw(16) << A.pavarde << "|"
-              << std::left << std::setw(16) << std::setprecision(2)<< galutinis_vid(A) << "|"
-              << std::left << std::setw(16) << std::setprecision(2)<< galutinis_med(A)<<  "|\n";
+              << std::left << std::setw(16) << std::fixed << std::setprecision(2)<< galutinis_vid(A) << "|"
+              << std::left << std::setw(16) << std::fixed << std::setprecision(2)<< galutinis_med(A)<<  "|\n";
 };
 
 double galutinis_vid(const studentas &A){
@@ -122,7 +133,6 @@ void rodyti_meniu(){
     std::cout << "| 3. Nuskaityti duomenis iš failo              |\n";
     std::cout << "| 0. Baigti darbą                              |\n";
     std::cout << "------------------------------------------------\n";
-    std::cout << "\nPasirinkite veiksma: ";
 };
 
 void rodyti_lentele(std::vector<studentas> &grupe){
@@ -140,7 +150,12 @@ void rodyti_lentele(std::vector<studentas> &grupe){
 void rankine_ivestis(std::vector<studentas> &grupe){
     std::cout << "Įveskite studentų kiekį: ";
     int n;
-    std::cin >> n;
+
+    while(!(std::cin >> n) || n < 1){
+        std::cout << "Klaida! Įveskite tinkama skaičių: ";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    };
 
     for(int j=0; j < n; j++){
         studentas tempStudentas;
@@ -199,18 +214,27 @@ void rankine_ivestis(std::vector<studentas> &grupe){
 void automatine_ivestis(std::vector<studentas> &grupe){
     std::cout << "Įveskite studentų kiekį: ";
     int n;
-    std::cin >> n;
+
+    while(!(std::cin >> n) || n < 1){
+        std::cout << "Klaida! Įveskite tinkama skaičių: ";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    };
 
     for(int j=0; j < n; j++){
         studentas tempStudentas;
 
         std::cout << "Įveskite per tarpa studento vardą ir pavardę: ";
         std::cin >> tempStudentas.vardas >> tempStudentas.pavarde;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         std::cout << "Įveskite kiek namų darbų pažymių norite sugeneruoti: ";
         int kiekis;
-        std::cin >> kiekis;
+        
+        while(!(std::cin >> kiekis) || kiekis < 1){
+            std::cout << "Klaida! Įveskite tinkama skaičių: ";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        };
         generuoti_paz(tempStudentas, kiekis);
 
         std::cout << "Namų darbų pažymiai: ";
@@ -228,7 +252,7 @@ void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinim
     std::ifstream f(failoPavadinimas);
 
     if(!f.is_open()){
-        std::cout << "Nepavyko atidaryti failo " << failoPavadinimas << '\n';
+        std::cout << "Nepavyko atidaryti failo: " << failoPavadinimas << '\n';
         return;
     }
     
