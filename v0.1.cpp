@@ -15,17 +15,6 @@ struct studentas{
     std::vector<int> paz;
     int exam;
     };
-
-const std::vector<std::string> vardai = {
-    "Jonas", "Lukas" "Emilija", "Ieva", "Tomas", "Pijus", "Liepa", "Austeja"
-};
-
-const std::vector<std::string> pavardes = {
-    "Jonaitis", "Petraits", "Kazlauskas", "Jankauskas",
-    "Pocius", "Stankevicius", "Butkus", "Vaitkus"
-
-};
-
     
 void printas(const studentas &A);
 double galutinis_vid(const studentas &A);
@@ -37,10 +26,13 @@ void rodyti_lentele(const std::vector<studentas> &grupe);
 void rankine_ivestis(std::vector<studentas> &grupe);
 void automatine_ivestis(std::vector<studentas> &grupe);
 void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinimas);
-void rusiavimas(std::vector<studentas> &grupe);
+void rusiavimasPV(std::vector<studentas> &grupe);
+void rusiavimasG(std::vector<studentas> &grupe);
+void rusiavimo_meniu(std::vector<studentas> &grupe);
 int ar_skaicius(std::string tekstas, int min, int max);
 void rasyti_i_faila(const std::vector<studentas> &grupe, std::string failoPavadinimas);
 void rodyti_rezultatus(const std::vector<studentas> &grupe);
+
 
 int main(){
     srand(time(NULL));
@@ -57,12 +49,12 @@ int main(){
                 break;
             case 1:
                 rankine_ivestis(grupe);
-                rusiavimas(grupe);
+                rusiavimo_meniu(grupe);
                 rodyti_lentele(grupe);
                 break;
             case 2:
                 automatine_ivestis(grupe);
-                rusiavimas(grupe);
+                rusiavimo_meniu(grupe);
                 rodyti_rezultatus(grupe);
                 break;
             case 3: {
@@ -70,7 +62,7 @@ int main(){
                 std::string failas;
                 std::cin >> failas; 
                 failo_nuskaitymas(grupe, failas);
-                rusiavimas(grupe);
+                rusiavimo_meniu(grupe);
                 if(!grupe.empty()){
                     rodyti_rezultatus(grupe);
                 }
@@ -266,7 +258,7 @@ void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinim
     f.close();
 };
 
-void rusiavimas(std::vector<studentas> &grupe){
+void rusiavimasPV(std::vector<studentas> &grupe){
     std::sort(grupe.begin(), grupe.end(),
         [](const studentas &a, const studentas &b){
             if (a.pavarde != b.pavarde){
@@ -274,6 +266,27 @@ void rusiavimas(std::vector<studentas> &grupe){
             }
             return a.vardas < b.vardas;
     });
+};
+
+void rusiavimasG(std::vector<studentas> &grupe){
+    std::sort(grupe.begin(), grupe.end(),
+        [](const studentas &a, const studentas &b){
+            return galutinis_vid(a) > galutinis_vid(b);
+    });
+};
+
+void rusiavimo_meniu(std::vector<studentas> &grupe){
+    int r;
+    std::cout << "Pasirinkite rūšiavimo būdą:\n";
+    std::cout << "1. Rūšiuoti pagal Vardą/Pavardę\n";
+    std::cout << "2. Rūšiuoti pagal Galutinį rezultatą\n";
+    r = ar_skaicius("Jūsų pasirinkimas: ", 1, 2);
+    
+    if (r == 1){
+        rusiavimasPV(grupe);
+    } else if (r == 2){
+        rusiavimasG(grupe);
+    }
 };
 
 int ar_skaicius(std::string tekstas, int min, int max){
@@ -295,7 +308,7 @@ void rasyti_i_faila(const std::vector<studentas> &grupe, std::string failoPavadi
     std::ofstream f(failoPavadinimas);
 
     if (!f.is_open()) {
-        std::cout << "Klaida! Nepavyko sukurti rezultatų failo.\n";
+        std::cout << "Klaida! Nepavyko sukurti failo.\n";
         return;
     }
 
