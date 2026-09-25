@@ -32,7 +32,7 @@ void rodyti_meniu();
 void rodyti_lentele(const std::vector<studentas> &grupe);
 void rankine_ivestis(std::vector<studentas> &grupe);
 void automatine_ivestis(std::vector<studentas> &grupe, std::mt19937 &mt);
-void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinimas);
+void nuskaityti_faila(std::vector<studentas> &grupe, std::string failoPavadinimas);
 void rusiavimasPV(std::vector<studentas> &grupe);
 void rusiavimasG(std::vector<studentas> &grupe);
 void rusiavimo_meniu(std::vector<studentas> &grupe);
@@ -41,7 +41,7 @@ void rasyti_i_faila(const std::vector<studentas> &grupe, std::string failoPavadi
 void rodyti_rezultatus(const std::vector<studentas> &grupe);
 void generuoti_faila(std::string failoPavadinimas, int stud_kiekis, int nd_kiekis, std::mt19937 &mt);
 bool failas_egzistuoja(const std::string &failoPavadinimas);
-
+void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, std::vector<studentas> &vargsiukai);
 
 int main(){
     std::vector<studentas> grupe; 
@@ -51,9 +51,10 @@ int main(){
     std::mt19937 mt(rd());
     int pasirinkimas;
 
+
     do{
         rodyti_meniu();
-        pasirinkimas = ar_skaicius("\nPasirinkite veiksma (0-5): ", 0, 5);
+        pasirinkimas = ar_skaicius("\nPasirinkite veiksma (0-6): ", 0, 6);
 
         switch(pasirinkimas){
             case 0:
@@ -73,7 +74,7 @@ int main(){
                 std::cout << "Įveskite failo pavadinimą: ";
                 std::string failas;
                 std::cin >> failas; 
-                failo_nuskaitymas(grupe, failas);
+                nuskaityti_faila(grupe, failas);
                 rusiavimo_meniu(grupe);
                 if(!grupe.empty()){
                     rodyti_rezultatus(grupe);
@@ -82,7 +83,7 @@ int main(){
                 }
             case 4:
                 char input;
-                std::cout << "Ar norite sugeneruoti testinius failus? (t/n): \n";
+                std::cout << "Ar norite sugeneruoti testinius failus? (t/n): ";
                 std:: cin >> input;
                 if(input == 't'){
                     for (int i = 0; i < failu_kiekis; i++){
@@ -99,7 +100,17 @@ int main(){
                 } 
                 break;
             case 5:
-                std::cout << "Spartos analizė:";
+                dalinti_studentus(grupe, kietiakai, vargsiukai);
+                if(!grupe.empty()){
+                    std::cout << "\nKietiakai";
+                    rodyti_rezultatus(kietiakai);;
+                }
+                if(!grupe.empty()){
+                    std::cout << "\nVargšiukai";
+                    rodyti_rezultatus(vargsiukai);
+                }
+                break;
+            case 6:
                 break;
         }
 
@@ -164,7 +175,8 @@ void rodyti_meniu(){
     std::cout << "| 2. Generuoti studentų pažymius atsitiktinai  |\n";
     std::cout << "| 3. Nuskaityti duomenis iš failo              |\n";
     std::cout << "| 4. Generuoti testavimo failus                |\n";
-    std::cout << "| 5. Atlikti spartos analize                   |\n";
+    std::cout << "| 5. Padalinti studentus į dvi kategorijas     |\n";
+    std::cout << "| 6. Atlikti spartos analize                   |\n";
     std::cout << "| 0. Baigti darbą                              |\n";
     std::cout << "------------------------------------------------\n";
 };
@@ -173,7 +185,7 @@ void rodyti_lentele(const std::vector<studentas> &grupe){
     std::cout << '\n' << "Studentų duomenys: \n";
     std::cout << std::string(67, '-') << '\n';
     std::cout << "|" << std::left << std::setw(14) << "Vardas" 
-              << "|" << std::left << std::setw(16) << "Pavardė" 
+              << "|" << std::left << std::setw(16) << "Pavarde" 
               << "|" << std::left << std::setw(16) << "Galutinis (Vid.)"
               << "|" << std::left << std::setw(16) << "Galutinis (Med.)"<< "|\n";
     std::cout << std::string(67, '-') << '\n';
@@ -256,7 +268,7 @@ void automatine_ivestis(std::vector<studentas> &grupe, std::mt19937 &mt){
     }
 };
 
-void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinimas){
+void nuskaityti_faila(std::vector<studentas> &grupe, std::string failoPavadinimas){
     std::ifstream f(failoPavadinimas);
 
     if(!f.is_open()){
@@ -264,11 +276,13 @@ void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinim
         return;
     }
     
-    std::string tekstas;
+    std::string eilute;
+    int eiluciu_sk = 0;
 
-    std::getline (f, tekstas);
-    while(std::getline(f, tekstas)){
-        std::stringstream ss(tekstas);
+    std::getline (f, eilute);
+    while(std::getline(f, eilute)){
+        if (eilute.empty()) continue;
+        std::stringstream ss(eilute);
         studentas tempStudentas;
         
         ss >> tempStudentas.vardas >> tempStudentas.pavarde;
@@ -286,11 +300,12 @@ void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinim
         }
 
         grupe.push_back(tempStudentas);
+        eiluciu_sk++;
     }
 
     f.close();
 };
-
+ 
 void rusiavimasPV(std::vector<studentas> &grupe){
     std::sort(grupe.begin(), grupe.end(),
         [](const studentas &a, const studentas &b){
@@ -370,7 +385,7 @@ void rodyti_rezultatus(const std::vector<studentas> &grupe) {
         std::cout << "\nStudentų kiekis didelis (" << grupe.size() << ")."; 
         std::cout << "Rezultatai bus išsaugoti faile.\n";
         std::string failoPavadinimas;
-        std::cout << "Įveskite failo pavadinim į kurį norite išsaugoti rezultatus: ";
+        std::cout << "Įveskite failo pavadinimą į kurį norite išsaugoti rezultatus: ";
         std::cin >> failoPavadinimas;
         rasyti_i_faila(grupe, failoPavadinimas);
     } else {
@@ -412,4 +427,12 @@ bool failas_egzistuoja(const std::string &failoPavadinimas){
     std::ifstream f(failoPavadinimas.data());
     return f.is_open();
 };
-    
+
+void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, std::vector<studentas> &vargsiukai){
+    auto atrinkti = std::stable_partition(grupe.begin(), grupe.end(), [](const studentas &s) {
+        return galutinis_vid(s) > 5.0;
+    });
+
+    kietiakai.assign(grupe.begin(), atrinkti);
+    vargsiukai.assign(atrinkti, grupe.end());
+};
