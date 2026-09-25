@@ -8,6 +8,9 @@
 #include <sstream>
 #include <algorithm>
 #include <random>
+#include <cctype>
+#include <chrono>
+#include <array>
 
 
 struct studentas{
@@ -15,6 +18,10 @@ struct studentas{
     std::vector<int> paz;
     int exam;
     };
+
+const int failu_kiekis = 5;
+const std::array<int, failu_kiekis> failu_dydziai = {1000, 10000, 100000, 1000000, 10000000};
+const std::array<std::string, failu_kiekis> failai = {"stud1000.txt", "stud10000.txt", "stud100000.txt", "stud1000000.txt", "stud10000000.txt"};
     
 void printas(const studentas &A);
 double galutinis_vid(const studentas &A);
@@ -24,7 +31,7 @@ void generuoti_paz(studentas &A, int count, std::mt19937 &mt);
 void rodyti_meniu();
 void rodyti_lentele(const std::vector<studentas> &grupe);
 void rankine_ivestis(std::vector<studentas> &grupe);
-void automatine_ivestis(std::vector<studentas> &grupe);
+void automatine_ivestis(std::vector<studentas> &grupe, std::mt19937 &mt);
 void failo_nuskaitymas(std::vector<studentas> &grupe, std::string failoPavadinimas);
 void rusiavimasPV(std::vector<studentas> &grupe);
 void rusiavimasG(std::vector<studentas> &grupe);
@@ -32,20 +39,25 @@ void rusiavimo_meniu(std::vector<studentas> &grupe);
 int ar_skaicius(std::string tekstas, int min, int max);
 void rasyti_i_faila(const std::vector<studentas> &grupe, std::string failoPavadinimas);
 void rodyti_rezultatus(const std::vector<studentas> &grupe);
+void generuoti_faila(std::string failoPavadinimas, int stud_kiekis, int nd_kiekis, std::mt19937 &mt);
+bool failas_egzistuoja(const std::string &failoPavadinimas);
 
 
 int main(){
-    srand(time(NULL));
-    std::vector<studentas>grupe; 
+    std::vector<studentas> grupe; 
+    std::vector<studentas> kietiakai;
+    std::vector<studentas> vargsiukai;
+    std::random_device rd;
+    std::mt19937 mt(rd());
     int pasirinkimas;
 
     do{
         rodyti_meniu();
-        pasirinkimas = ar_skaicius("\nPasirinkite veiksma (0-3): ", 0, 3);
+        pasirinkimas = ar_skaicius("\nPasirinkite veiksma (0-5): ", 0, 5);
 
         switch(pasirinkimas){
             case 0:
-                std::cout << "Baigiamas darbas\n";
+                std::cout << "Darbas baigtas\n";
                 break;
             case 1:
                 rankine_ivestis(grupe);
@@ -53,7 +65,7 @@ int main(){
                 rodyti_lentele(grupe);
                 break;
             case 2:
-                automatine_ivestis(grupe);
+                automatine_ivestis(grupe, mt);
                 rusiavimo_meniu(grupe);
                 rodyti_rezultatus(grupe);
                 break;
@@ -68,6 +80,27 @@ int main(){
                 }
                 break;
                 }
+            case 4:
+                char input;
+                std::cout << "Ar norite sugeneruoti testinius failus? (t/n): \n";
+                std:: cin >> input;
+                if(input == 't'){
+                    for (int i = 0; i < failu_kiekis; i++){
+                        if(!failas_egzistuoja(failai[i])){
+                            auto start = std::chrono::high_resolution_clock::now();
+                            generuoti_faila(failai[i], failu_dydziai[i], 10, mt);
+                            auto end = std::chrono::high_resolution_clock::now();
+                            std::chrono::duration<double> f_sukurimas = end - start;
+                            std::cout << "Failo " << failai[i] << " generavimo laikas: " << f_sukurimas.count() << "s.\n";
+                        } else{
+                            std::cout << "Failas " << failai[i] << " jau egzistuoja.\n";
+                        }
+                    }
+                } 
+                break;
+            case 5:
+                std::cout << "Spartos analizė:";
+                break;
         }
 
     } while(pasirinkimas != 0);
@@ -130,6 +163,8 @@ void rodyti_meniu(){
     std::cout << "| 1. Įvesti studentų duomenis rankiniu būdu    |\n";
     std::cout << "| 2. Generuoti studentų pažymius atsitiktinai  |\n";
     std::cout << "| 3. Nuskaityti duomenis iš failo              |\n";
+    std::cout << "| 4. Generuoti testavimo failus                |\n";
+    std::cout << "| 5. Atlikti spartos analize                   |\n";
     std::cout << "| 0. Baigti darbą                              |\n";
     std::cout << "------------------------------------------------\n";
 };
@@ -204,15 +239,13 @@ void rankine_ivestis(std::vector<studentas> &grupe){
 
 };
 
-void automatine_ivestis(std::vector<studentas> &grupe){
+void automatine_ivestis(std::vector<studentas> &grupe, std::mt19937 &mt){
+    std::uniform_int_distribution<int> dist(1, 10);
     int stud_kiekis;
     stud_kiekis = ar_skaicius("Įveskite studentų kiekį: ", 1, 10000000);
     
-    int nd_kiekis;
+    int nd_kiekis; 
     nd_kiekis = ar_skaicius("Įveskite kiek namų darbų pažymių norite sugeneruoti: ", 1, 10); 
-
-    std::random_device rd;
-    std::mt19937 mt(rd());
 
     for(int j=0; j < stud_kiekis; j++){
         studentas tempStudentas;
@@ -345,3 +378,38 @@ void rodyti_rezultatus(const std::vector<studentas> &grupe) {
     }
 };
 
+void generuoti_faila(std::string failoPavadinimas, int stud_kiekis, int nd_kiekis, std::mt19937 &mt){
+    std::ofstream f(failoPavadinimas);
+    std::uniform_int_distribution<int> dist(1, 10);
+
+    if (!f.is_open()) {
+        std::cout << "Klaida! Nepavyko sukurti failo.\n";
+        return;
+    }
+
+    f << std::left << std::setw(16) << "Vardas" << std::setw(16) << "Pavardė";
+    for(int i = 1; i <= nd_kiekis; i++){
+        f << std::left << std::setw(10) << ("ND" + std::to_string(i));
+    }
+    f << std::left << std::setw(10) << "Egz" << '\n';
+
+    for(int i = 1; i <= stud_kiekis; i++){
+        f << std::left << std::setw(16) << ("Vardas" + std::to_string(i))
+          << std::setw(16) << ("Pavarde" + std::to_string(i));
+        
+        for(int j = 1; j <= nd_kiekis; j++){
+            f << std::setw(10) << dist(mt);
+        }
+        f << std::setw(10) << dist(mt) << '\n';
+    }
+
+    f.close();
+
+    std::cout << "Failas " << failoPavadinimas << " su " << stud_kiekis << " sugeneruotas sekmingai!\n";
+};
+
+bool failas_egzistuoja(const std::string &failoPavadinimas){
+    std::ifstream f(failoPavadinimas.data());
+    return f.is_open();
+};
+    
