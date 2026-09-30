@@ -42,6 +42,9 @@ void rodyti_rezultatus(const std::vector<studentas> &grupe);
 void generuoti_faila(std::string failoPavadinimas, int stud_kiekis, int nd_kiekis, std::mt19937 &mt);
 bool failas_egzistuoja(const std::string &failoPavadinimas);
 void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, std::vector<studentas> &vargsiukai);
+void spartos_analize(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, 
+                     std::vector<studentas> &vargsiukai, std::string failoPavadinimas);
+
 
 int main(){
     std::vector<studentas> grupe; 
@@ -111,6 +114,10 @@ int main(){
                 }
                 break;
             case 6:
+                std::cout << "\nSpartos analizė:";
+                for (int i = 0; i < failu_kiekis; i++){
+                    spartos_analize(grupe, kietiakai, vargsiukai, failai[i]);
+                }
                 break;
         }
 
@@ -435,4 +442,41 @@ void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &ki
 
     kietiakai.assign(grupe.begin(), atrinkti);
     vargsiukai.assign(atrinkti, grupe.end());
+};
+
+void spartos_analize(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, 
+                     std::vector<studentas> &vargsiukai, std::string failoPavadinimas){
+    grupe.clear();
+    vargsiukai.clear();
+    kietiakai.clear();
+    
+    std::cout << "\nAnalizuojamas failas: " << failoPavadinimas << '\n';
+
+    auto start = std::chrono::high_resolution_clock::now();
+    nuskaityti_faila(grupe, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
+    rusiavimasPV(grupe);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t_nuskaitymas = end - start;
+    std::cout << "Duomenų nuskaitymas: " << t_nuskaitymas.count() << "s\n";
+
+    start = std::chrono::high_resolution_clock::now();
+    dalinti_studentus(grupe, kietiakai, vargsiukai);
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t_dalijimas = end - start;
+    std::cout << "Studentų dalijimas į dvį kategorijas: " << t_dalijimas.count() << "s\n";
+
+    start = std::chrono::high_resolution_clock::now();
+    rasyti_i_faila(kietiakai, "kietiakai_" + (failoPavadinimas));
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t_kietiakai = end - start;
+    std::cout << "Kietiakių įrašymas į failą: " << t_kietiakai.count() << "s\n";
+    
+    start = std::chrono::high_resolution_clock::now();
+    rasyti_i_faila(vargsiukai, "vargsiukai_" + (failoPavadinimas));
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t_vargsiukai = end - start;
+    std::cout << "Vargšiukų įrašymas į failą: " << t_vargsiukai.count() << "s\n";
+
+    double bendras_t = t_nuskaitymas.count() + t_dalijimas.count() + t_kietiakai.count() + t_vargsiukai.count();
+    std::cout << "Bendras testo laikas: " << bendras_t << "s\n";
 };
