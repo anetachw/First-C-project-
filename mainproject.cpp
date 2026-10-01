@@ -32,7 +32,7 @@ void rodyti_meniu();
 void rodyti_lentele(const std::vector<studentas> &grupe);
 void rankine_ivestis(std::vector<studentas> &grupe);
 void automatine_ivestis(std::vector<studentas> &grupe, std::mt19937 &mt);
-void nuskaityti_faila(std::vector<studentas> &grupe, std::string failoPavadinimas);
+void nuskaityti_faila(std::vector<studentas> &grupe, const std::string failoPavadinimas);
 void rusiavimasPV(std::vector<studentas> &grupe);
 void rusiavimasG(std::vector<studentas> &grupe);
 void rusiavimo_meniu(std::vector<studentas> &grupe);
@@ -201,11 +201,12 @@ void rodyti_lentele(const std::vector<studentas> &grupe){
 };
 
 void rankine_ivestis(std::vector<studentas> &grupe){
-    int n;
-    n = ar_skaicius("Įveskite studentų kiekį: ", 1, 100);
+    int stud_kiekis = ar_skaicius("Įveskite studentų kiekį: ", 1, 30);
+    grupe.reserve(grupe.size() + stud_kiekis);
 
-    for(int j=0; j < n; j++){
+    for(int j=0; j < stud_kiekis; j++){
         studentas tempStudentas;
+        tempStudentas.paz.reserve(10);
 
         std::cout << "Įveskite per tarpa studento vardą ir pavardę: ";
         std::cin >> tempStudentas.vardas >> tempStudentas.pavarde;
@@ -259,15 +260,14 @@ void rankine_ivestis(std::vector<studentas> &grupe){
 };
 
 void automatine_ivestis(std::vector<studentas> &grupe, std::mt19937 &mt){
-    std::uniform_int_distribution<int> dist(1, 10);
-    int stud_kiekis;
-    stud_kiekis = ar_skaicius("Įveskite studentų kiekį: ", 1, 10000000);
-    
-    int nd_kiekis; 
-    nd_kiekis = ar_skaicius("Įveskite kiek namų darbų pažymių norite sugeneruoti: ", 1, 10); 
+    int stud_kiekis = ar_skaicius("Įveskite studentų kiekį: ", 1, 10000000);
+    grupe.reserve(grupe.size() + stud_kiekis);
+
+    int nd_kiekis = ar_skaicius("Įveskite kiek namų darbų pažymių norite sugeneruoti: ", 1, 10); 
 
     for(int j=0; j < stud_kiekis; j++){
         studentas tempStudentas;
+        tempStudentas.paz.reserve(nd_kiekis);
         tempStudentas.vardas = "Vardas" + std::to_string(j + 1);
         tempStudentas.pavarde = "Pavarde" + std::to_string(j + 1);
         generuoti_paz(tempStudentas, nd_kiekis, mt);
@@ -275,39 +275,41 @@ void automatine_ivestis(std::vector<studentas> &grupe, std::mt19937 &mt){
     }
 };
 
-void nuskaityti_faila(std::vector<studentas> &grupe, std::string failoPavadinimas){
-    std::ifstream f(failoPavadinimas);
+void nuskaityti_faila(std::vector<studentas> &grupe, const std::string failoPavadinimas){
+    std::ifstream f(failoPavadinimas, std::ios::ate);
 
     if(!f.is_open()){
         std::cout << "Nepavyko atidaryti failo: " << failoPavadinimas << '\n';
         return;
-    }
+    };
+
+    std::streamsize file_size = f.tellg();
+    f.seekg(0, std::ios::beg); 
+    size_t eil_sk = file_size / 134;
+    grupe.reserve(grupe.size() + eil_sk);
     
     std::string eilute;
-    int eiluciu_sk = 0;
 
     std::getline (f, eilute);
     while(std::getline(f, eilute)){
         if (eilute.empty()) continue;
         std::stringstream ss(eilute);
-        studentas tempStudentas;
+        studentas tempStudentas; 
+        tempStudentas.paz.reserve(11);
         
         ss >> tempStudentas.vardas >> tempStudentas.pavarde;
 
         int skaicius;
-        std::vector<int> visiSkaiciai;
         while (ss >> skaicius){
-            visiSkaiciai.push_back(skaicius);
+            tempStudentas.paz.push_back(skaicius);
         }
 
-        if (!visiSkaiciai.empty()){
-            tempStudentas.exam = visiSkaiciai.back();
-            visiSkaiciai.pop_back();
-            tempStudentas.paz = visiSkaiciai;
+        if (!tempStudentas.paz.empty()){
+            tempStudentas.exam = tempStudentas.paz.back();
+            tempStudentas.paz.pop_back();
         }
 
         grupe.push_back(tempStudentas);
-        eiluciu_sk++;
     }
 
     f.close();
@@ -427,7 +429,7 @@ void generuoti_faila(std::string failoPavadinimas, int stud_kiekis, int nd_kieki
 
     f.close();
 
-    std::cout << "Failas " << failoPavadinimas << " su " << stud_kiekis << " sugeneruotas sekmingai!\n";
+    std::cout << "Failas " << failoPavadinimas << " su " << stud_kiekis << " sugeneruotas sekmingai\n";
 };
 
 bool failas_egzistuoja(const std::string &failoPavadinimas){
@@ -439,6 +441,9 @@ void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &ki
     auto atrinkti = std::stable_partition(grupe.begin(), grupe.end(), [](const studentas &s) {
         return galutinis_vid(s) > 5.0;
     });
+
+    vargsiukai.reserve(grupe.size() / 2);
+    kietiakai.reserve(grupe.size() / 2);
 
     kietiakai.assign(grupe.begin(), atrinkti);
     vargsiukai.assign(atrinkti, grupe.end());
