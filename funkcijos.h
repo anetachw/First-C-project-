@@ -28,4 +28,4 @@ bool failas_egzistuoja(const std::string &failoPavadinimas);
 void rasyti_i_faila(const std::vector<studentas> &grupe, std::string failoPavadinimas);
 void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, std::vector<studentas> &vargsiukai);
 void spartos_analize(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, 
-                     std::vector<studentas> &vargsiukai, std::string failoPavadinimas);
+                     std::vector<studentas> &vargsiukai, std::string failoPavadinimas, int kartojimai = 5);

@@ -206,14 +206,16 @@ void nuskaityti_faila(std::vector<studentas> &grupe, const std::string failoPava
     grupe.reserve(grupe.size() + eil_sk);
     
     std::string eilute;
-
     std::getline (f, eilute);
+
+    std::stringstream ss;
     while(std::getline(f, eilute)){
         if (eilute.empty()) continue;
-        std::stringstream ss(eilute);
+        ss.str(eilute);
+        ss.clear();
+
         studentas tempStudentas; 
         tempStudentas.paz.reserve(11);
-        
         ss >> tempStudentas.vardas >> tempStudentas.pavarde;
 
         int skaicius;
@@ -291,8 +293,6 @@ void generuoti_faila(std::string failoPavadinimas, int stud_kiekis, int nd_kieki
     }
 
     f.close();
-
-    std::cout << "Failas " << failoPavadinimas << " su " << stud_kiekis << " sugeneruotas sekmingai\n";
 };
 
 bool failas_egzistuoja(const std::string &failoPavadinimas){
@@ -323,7 +323,6 @@ void rasyti_i_faila(const std::vector<studentas> &grupe, std::string failoPavadi
     }
 
     f.close();
-    std::cout << "Rezultatai sėkmingai išsaugoti faile: " << failoPavadinimas << "\n";
 };
 
 void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, std::vector<studentas> &vargsiukai){
@@ -339,38 +338,51 @@ void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &ki
 };
 
 void spartos_analize(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, 
-                     std::vector<studentas> &vargsiukai, std::string failoPavadinimas){
-    grupe.clear();
-    vargsiukai.clear();
-    kietiakai.clear();
+                     std::vector<studentas> &vargsiukai, const std::string failoPavadinimas, int kartojimai){
     
     std::cout << "\nAnalizuojamas failas: " << failoPavadinimas << '\n';
-
-    auto start = std::chrono::high_resolution_clock::now();
-    nuskaityti_faila(grupe, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
-    rusiavimasPV(grupe);
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> t_nuskaitymas = end - start;
-    std::cout << "Duomenų nuskaitymas: " << std::fixed << std::setprecision(6) << t_nuskaitymas.count() << "s\n";
-
-    start = std::chrono::high_resolution_clock::now();
-    dalinti_studentus(grupe, kietiakai, vargsiukai);
-    end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> t_dalijimas = end - start;
-    std::cout << "Studentų dalijimas į dvį kategorijas: " << std::fixed << std::setprecision(6) << t_dalijimas.count() << "s\n";
-
-    start = std::chrono::high_resolution_clock::now();
-    rasyti_i_faila(kietiakai, "kietiakai_" + (failoPavadinimas));
-    end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> t_kietiakai = end - start;
-    std::cout << "Kietiakių įrašymas į failą: " << std::fixed << std::setprecision(6) << t_kietiakai.count() << "s\n";
+    double suma_nuskaitymas = 0.0;
+    double suma_dalijimas = 0.0;
+    double suma_kietiakai = 0.0;
+    double suma_vargsiukai = 0.0;
     
-    start = std::chrono::high_resolution_clock::now();
-    rasyti_i_faila(vargsiukai, "vargsiukai_" + (failoPavadinimas));
-    end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> t_vargsiukai = end - start;
-    std::cout << "Vargšiukų įrašymas į failą: " << std::fixed << std::setprecision(6) << t_vargsiukai.count() << "s\n";
+    for (int k = 0; k < kartojimai; k++){
+        grupe.clear();
+        vargsiukai.clear();
+        kietiakai.clear();
 
-    double bendras_t = t_nuskaitymas.count() + t_dalijimas.count() + t_kietiakai.count() + t_vargsiukai.count();
-    std::cout << "Bendras testo laikas: " << std::fixed << std::setprecision(6) << bendras_t << "s\n";
-}
+        auto start = std::chrono::high_resolution_clock::now();
+        nuskaityti_faila(grupe, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
+        rusiavimasPV(grupe);
+        auto end = std::chrono::high_resolution_clock::now();
+        suma_nuskaitymas += std::chrono::duration<double>(end - start).count();
+        
+        start = std::chrono::high_resolution_clock::now();
+        dalinti_studentus(grupe, kietiakai, vargsiukai);
+        end = std::chrono::high_resolution_clock::now();
+        suma_dalijimas += std::chrono::duration<double>(end - start).count();
+        
+        start = std::chrono::high_resolution_clock::now();
+        rasyti_i_faila(kietiakai, "kietiakai_" + (failoPavadinimas));
+        end = std::chrono::high_resolution_clock::now();
+        suma_kietiakai += std::chrono::duration<double>(end - start).count();
+        
+        start = std::chrono::high_resolution_clock::now();
+        rasyti_i_faila(vargsiukai, "vargsiukai_" + (failoPavadinimas));
+        end = std::chrono::high_resolution_clock::now();
+        suma_vargsiukai += std::chrono::duration<double>(end - start).count();
+    } 
+
+    double vid_nuskaitymas = suma_nuskaitymas / kartojimai;
+    double vid_dalijimas = suma_dalijimas / kartojimai;
+    double vid_kietiakai = suma_kietiakai / kartojimai;
+    double vid_vargsiukai = suma_vargsiukai / kartojimai;
+    double bendras_vid = vid_nuskaitymas + vid_dalijimas + vid_kietiakai + vid_vargsiukai;
+
+    std::cout << std::fixed << std::setprecision(6);
+    std::cout << "Vidutinis duomenų nuskaitymas:         " << vid_nuskaitymas << "s\n";
+    std::cout << "Vidutinis studentų dalijimas:          " << vid_dalijimas << "s\n";
+    std::cout << "Vidutinis kietiakių įrašymas į failą:  " << vid_kietiakai << "s\n";
+    std::cout << "Vidutinis vargšiukų įrašymas į failą:  " << vid_vargsiukai << "s\n";
+    std::cout << "Bendras vidutinis testo laikas:        " << bendras_vid << "s\n";
+}   
