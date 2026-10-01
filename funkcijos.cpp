@@ -327,7 +327,7 @@ void rasyti_i_faila(const std::vector<studentas> &grupe, std::string failoPavadi
 
 void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, std::vector<studentas> &vargsiukai){
     auto atrinkti = std::stable_partition(grupe.begin(), grupe.end(), [](const studentas &s) {
-        return galutinis_vid(s) > 5.0;
+        return galutinis_vid(s) >= 5.0;
     });
 
     vargsiukai.reserve(grupe.size() / 2);
