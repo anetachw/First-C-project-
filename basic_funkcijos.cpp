@@ -1,5 +1,4 @@
 #include "basic_funkcijos.h"
-#include "Lfunkcijos.h"
 #include "Vfunkcijos.h"
 #include <iostream>
 #include <iomanip>
@@ -72,6 +71,15 @@ void rodyti_meniu(){
     std::cout << "------------------------------------------------\n";
 };
 
+void rodyti_konteineri(){
+    std::cout << "\n------------------------------\n";
+    std::cout << "|        KONTEINERIS         |\n";
+    std::cout << "------------------------------\n";
+    std::cout << "| 1. Vector                  |\n";
+    std::cout << "| 2. List                    |\n";
+    std::cout << "------------------------------\n";
+};
+
 void printas(const studentas &A){
     std::cout << "|" << std::left << std::setw(14) << A.vardas 
               << "|" << std::left << std::setw(16) << A.pavarde << "|"
@@ -120,31 +128,4 @@ void generuoti_faila(std::string failoPavadinimas, int stud_kiekis, int nd_kieki
 bool failas_egzistuoja(const std::string &failoPavadinimas){
     std::ifstream f(failoPavadinimas.data());
     return f.is_open();
-};
-
-void rodyti_lentele(const std::vector<studentas> &grupe){
-    std::cout << '\n' << "Studentų duomenys: \n";
-    std::cout << std::string(67, '-') << '\n';
-    std::cout << "|" << std::left << std::setw(14) << "Vardas" 
-              << "|" << std::left << std::setw(16) << "Pavarde" 
-              << "|" << std::left << std::setw(16) << "Galutinis (Vid.)"
-              << "|" << std::left << std::setw(16) << "Galutinis (Med.)"<< "|\n";
-    std::cout << std::string(67, '-') << '\n';
-    for(const studentas &B : grupe) printas(B);
-    std::cout << std::string(67, '-') << '\n';
-};
-
-void rodyti_rezultatus(const std::vector<studentas> &grupe) {
-    int limit = 30; 
-
-    if (grupe.size() > limit) {
-        std::cout << "\nStudentų kiekis didelis (" << grupe.size() << ")."; 
-        std::cout << "Rezultatai bus išsaugoti faile.\n";
-        std::string failoPavadinimas;
-        std::cout << "Įveskite failo pavadinimą į kurį norite išsaugoti rezultatus: ";
-        std::cin >> failoPavadinimas;
-        rasyti_i_faila(grupe, failoPavadinimas);
-    } else {
-        rodyti_lentele(grupe);
-    }
 };

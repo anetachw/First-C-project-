@@ -97,7 +97,7 @@ void paleisti_programa(std::mt19937 &mt){
             pasirinkimas = ar_skaicius("\nPasirinkite veiksma (0-6): ", 0, 6);
 
             switch(pasirinkimas){
-                case 0:
+                case 0: 
                     std::cout << "Darbas baigtas\n";
                     break;
                 case 1:
@@ -155,8 +155,7 @@ void paleisti_programa(std::mt19937 &mt){
                     for (int i = 0; i < failu_kiekis; i++){
                         spartos_analize(grupe, kietiakai, vargsiukai, failai[i]);
                     }
-                    break;
+                    break; 
             }
-
         } while(pasirinkimas != 0);
 };

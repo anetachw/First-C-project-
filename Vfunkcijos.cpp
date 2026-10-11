@@ -1,5 +1,6 @@
 #include "basic_funkcijos.h"
 #include "Vfunkcijos.h"
+#include "Tfunkcijos.h"
 #include <iostream>
 #include <iomanip>
 #include <numeric>
@@ -144,7 +145,6 @@ void rusiavimasG(std::vector<studentas> &grupe){
             return galutinis_vid(a) > galutinis_vid(b);
     });
 };
-
 
 void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, std::vector<studentas> &vargsiukai){
     auto atrinkti = std::stable_partition(grupe.begin(), grupe.end(), [](const studentas &s) {

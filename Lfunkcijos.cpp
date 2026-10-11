@@ -1,6 +1,5 @@
 #include "basic_funkcijos.h"
 #include "Lfunkcijos.h"
-#include "Tfunkcijos.h"
 #include <iostream>
 #include <iomanip>
 #include <numeric>
@@ -11,13 +10,27 @@
 #include <chrono>
 
 
-void rankine_ivestis(std::vector<studentas> &grupe);
-void automatine_ivestis(std::vector<studentas> &grupe, std::mt19937 &mt);
-void nuskaityti_faila(std::vector<studentas> &grupe, const std::string failoPavadinimas);
+void rankine_ivestis(std::list<studentas> &grupe){
 
-void rusiavimasPV(std::vector<studentas> &grupe);
-void rusiavimasG(std::vector<studentas> &grupe);
+};
 
-void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, std::vector<studentas> &vargsiukai);
-void spartos_analize(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, 
-                     std::vector<studentas> &vargsiukai, std::string failoPavadinimas, int kartojimai);
+void automatine_ivestis(std::list<studentas> &grupe, std::mt19937 &mt){
+
+
+};
+
+void nuskaityti_faila(std::list<studentas> &grupe, const std::string failoPavadinimas){
+
+};
+
+void rusiavimasPV(std::list<studentas> &grupe){
+
+};
+
+void rusiavimasG(std::list<studentas> &grupe){
+
+};
+
+void dalinti_studentus(std::list<studentas> &grupe, std::list<studentas> &kietiakai, std::list<studentas> &vargsiukai);
+void spartos_analize(std::list<studentas> &grupe, std::list<studentas> &kietiakai, 
+                     std::list<studentas> &vargsiukai, std::string failoPavadinimas, int kartojimai);
