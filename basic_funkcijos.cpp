@@ -1,5 +1,4 @@
 #include "basic_funkcijos.h"
-#include "Vfunkcijos.h"
 #include <iostream>
 #include <iomanip>
 #include <numeric>
@@ -73,10 +72,10 @@ void rodyti_meniu(){
 
 void rodyti_konteineri(){
     std::cout << "\n------------------------------\n";
-    std::cout << "|        KONTEINERIS         |\n";
+    std::cout << "|        KONTEINERIAI        |\n";
     std::cout << "------------------------------\n";
-    std::cout << "| 1. Vector                  |\n";
-    std::cout << "| 2. List                    |\n";
+    std::cout << "| 1. Vektorius               |\n";
+    std::cout << "| 2. Sąrašas                 |\n";
     std::cout << "------------------------------\n";
 };
 

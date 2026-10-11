@@ -1,6 +1,5 @@
 #include "basic_funkcijos.h"
 #include "Vfunkcijos.h"
-#include "Tfunkcijos.h"
 #include <iostream>
 #include <iomanip>
 #include <numeric>

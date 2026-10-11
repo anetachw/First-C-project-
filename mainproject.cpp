@@ -4,7 +4,6 @@
 #include "basic_funkcijos.h"
 #include "Vfunkcijos.h"
 #include "Lfunkcijos.h"
-#include "Tfunkcijos.h"
 #include <array>
 #include <list>
 
