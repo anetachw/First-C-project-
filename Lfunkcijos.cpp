@@ -15,6 +15,7 @@ void rankine_ivestis(std::list<studentas> &grupe){
 
     for (int j=0; j < stud_kiekis; j++){
         studentas tempStudentas;
+        tempStudentas.paz.reserve(10);
 
         std::cout << "Įveskite per tarpa studento vardą ir pavardę: ";
         std::cin >> tempStudentas.vardas >> tempStudentas.pavarde;
@@ -66,7 +67,6 @@ void rankine_ivestis(std::list<studentas> &grupe){
         auto it = grupe.begin();
         std::advance(it, j);
         std::cout << "Objekto adresas atmintyje: " << &(*it) << '\n'; 
-
     }
 };
 
@@ -85,7 +85,44 @@ void automatine_ivestis(std::list<studentas> &grupe, std::mt19937 &mt){
 };
 
 void nuskaityti_faila(std::list<studentas> &grupe, const std::string failoPavadinimas){
+    std::ifstream f(failoPavadinimas, std::ios::ate);
 
+    if(!f.is_open()){
+        std::cout << "Nepavyko atidaryti failo: " << failoPavadinimas << '\n';
+        return;
+    };
+
+    std::streamsize file_size = f.tellg();
+    f.seekg(0, std::ios::beg); 
+    size_t eil_sk = file_size / 134;
+    
+    std::string eilute;
+    std::getline (f, eilute);
+
+    std::stringstream ss;
+    while(std::getline(f, eilute)){
+        if (eilute.empty()) continue;
+        ss.str(eilute);
+        ss.clear();
+
+        studentas tempStudentas; 
+        tempStudentas.paz.reserve(11);
+        ss >> tempStudentas.vardas >> tempStudentas.pavarde;
+
+        int skaicius;
+        while (ss >> skaicius){
+            tempStudentas.paz.push_back(skaicius);
+        }
+
+        if (!tempStudentas.paz.empty()){
+            tempStudentas.exam = tempStudentas.paz.back();
+            tempStudentas.paz.pop_back();
+        }
+
+        grupe.push_back(tempStudentas);
+    }
+
+    f.close();
 };
 
 void rusiavimasPV(std::list<studentas> &grupe){

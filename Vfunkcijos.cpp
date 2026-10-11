@@ -68,7 +68,6 @@ void rankine_ivestis(std::vector<studentas> &grupe){
         grupe.push_back(tempStudentas);
         std::cout << "Objekto adresas atmintyje: " << &grupe[j] << '\n'; 
     }
-
 };
 
 void automatine_ivestis(std::vector<studentas> &grupe, std::mt19937 &mt){

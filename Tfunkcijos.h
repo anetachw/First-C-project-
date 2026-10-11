@@ -62,6 +62,7 @@ void rasyti_i_faila(const T &grupe, std::string failoPavadinimas){
           << std::left << std::setw(16) << std::fixed << std::setprecision(2)<< galutinis_vid(s) << "|"
           << std::left << std::setw(16) << std::fixed << std::setprecision(2)<< galutinis_med(s)<<  "|\n";
     }
+    f << std::string(67, '-') << '\n';
 
     f.close();
 };
