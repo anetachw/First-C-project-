@@ -2,19 +2,28 @@
 
 #include "studentas.h"
 #include <string>
+#include <iostream>
+#include <iomanip>
+#include <fstream> 
 #include <random>
 
+
 double galutinis_vid(const studentas &A);
+
 double mediana(std::vector<int> paz);
+
 double galutinis_med(const studentas &A);
+
 int ar_skaicius(std::string tekstas, int min, int max);
 
 void rodyti_meniu();
+
 void printas(const studentas &A);
 
 void generuoti_paz(studentas &A, int count, std::mt19937 &mt);
 
 void generuoti_faila(std::string failoPavadinimas, int stud_kiekis, int nd_kiekis, std::mt19937 &mt);
+
 bool failas_egzistuoja(const std::string &failoPavadinimas);
 
 
@@ -27,7 +36,7 @@ void rodyti_lentele(const T &grupe){
               << "|" << std::left << std::setw(16) << "Galutinis (Vid.)"
               << "|" << std::left << std::setw(16) << "Galutinis (Med.)"<< "|\n";
     std::cout << std::string(67, '-') << '\n';
-    for(const T &B : grupe) printas(B);
+    for(const studentas &B : grupe) printas(B);
     std::cout << std::string(67, '-') << '\n';
 };
 
@@ -75,7 +84,7 @@ void rasyti_i_faila(const T &grupe, std::string failoPavadinimas){
 
 template <typename T>
 void rusiavimo_meniu(T &grupe){
-    std::cout << "Pasirinkite rūšiavimo būdą:\n";
+    std::cout << "\nPasirinkite rūšiavimo būdą:\n";
     std::cout << "1. Rūšiuoti pagal Vardą/Pavardę\n";
     std::cout << "2. Rūšiuoti pagal galutinį rezultatą\n";
     int r = ar_skaicius("Jūsų pasirinkimas: ", 1, 2);
