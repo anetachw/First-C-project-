@@ -71,7 +71,16 @@ void rankine_ivestis(std::list<studentas> &grupe){
 };
 
 void automatine_ivestis(std::list<studentas> &grupe, std::mt19937 &mt){
+    int stud_kiekis = ar_skaicius("Įveskite studentų kiekį: ", 1, 1000000);
+    int nd_kiekis = ar_skaicius("Įveskite kiek namų darbų pažymių norite sugeneruoti: ", 1, 10); 
 
+    for(int j=0; j < stud_kiekis; j++){
+        studentas tempStudentas;
+        tempStudentas.vardas = "Vardas" + std::to_string(j + 1);
+        tempStudentas.pavarde = "Pavarde" + std::to_string(j + 1);
+        generuoti_paz(tempStudentas, nd_kiekis, mt);
+        grupe.push_back(tempStudentas);
+    }
 
 };
 
@@ -80,11 +89,18 @@ void nuskaityti_faila(std::list<studentas> &grupe, const std::string failoPavadi
 };
 
 void rusiavimasPV(std::list<studentas> &grupe){
-
+    grupe.sort([](const studentas &a, const studentas &b){
+        if (a.pavarde != b.pavarde){
+            return a.pavarde < b.pavarde;
+        }
+        return a.vardas < b.vardas;
+    });
 };
 
 void rusiavimasG(std::list<studentas> &grupe){
-
+    grupe.sort([](const studentas &a, const studentas &b){
+            return galutinis_vid(a) > galutinis_vid(b);
+    });
 };
 
 void dalinti_studentus(std::list<studentas> &grupe, std::list<studentas> &kietiakai, std::list<studentas> &vargsiukai){

@@ -72,7 +72,7 @@ void rankine_ivestis(std::vector<studentas> &grupe){
 };
 
 void automatine_ivestis(std::vector<studentas> &grupe, std::mt19937 &mt){
-    int stud_kiekis = ar_skaicius("Įveskite studentų kiekį: ", 1, 10000000);
+    int stud_kiekis = ar_skaicius("Įveskite studentų kiekį: ", 1, 1000000);
     grupe.reserve(grupe.size() + stud_kiekis);
 
     int nd_kiekis = ar_skaicius("Įveskite kiek namų darbų pažymių norite sugeneruoti: ", 1, 10); 
