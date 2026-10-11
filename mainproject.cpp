@@ -19,8 +19,7 @@ int main(){
     if (konteineris == 1){
         paleisti_programa<std::vector<studentas>>(mt);
     }
-    /*else if (konteineris == 2){
+    else if (konteineris == 2){
         paleisti_programa<std::list<studentas>>(mt);
-    }*/
-
+    }
 }

@@ -65,8 +65,8 @@ void rankine_ivestis(std::vector<studentas> &grupe){
                 std::cout << "Klaida! Ivedėte ne skaičių, bandykite dar karta.\n";
             }
         }
-        std::cout << "Objekto adresas atmintyje: " << &tempStudentas << '\n'; 
         grupe.push_back(tempStudentas);
+        std::cout << "Objekto adresas atmintyje: " << &grupe[j] << '\n'; 
     }
 
 };
