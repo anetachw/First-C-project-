@@ -141,7 +141,14 @@ void rusiavimasG(std::list<studentas> &grupe){
 };
 
 void dalinti_studentus(std::list<studentas> &grupe, std::list<studentas> &kietiakai, std::list<studentas> &vargsiukai){
-
+    for (auto it = grupe.begin(); it != grupe.end(); ){
+        if (galutinis_vid(*it) >= 5.0){
+            kietiakai.splice(kietiakai.end(), grupe, it++);
+        }
+        else {
+            vargsiukai.splice(vargsiukai.end(), grupe, it++);
+        }
+    }
 
 };
 

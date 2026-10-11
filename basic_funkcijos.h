@@ -113,7 +113,7 @@ void paleisti_programa(std::mt19937 &mt){
     int pasirinkimas;
         do{
             rodyti_meniu();
-            pasirinkimas = ar_skaicius("\nPasirinkite veiksma (0-6): ", 0, 6);
+            pasirinkimas = ar_skaicius("\nPasirinkite veiksma (0-7): ", 0, 7);
 
             switch(pasirinkimas){
                 case 0: 
@@ -160,11 +160,11 @@ void paleisti_programa(std::mt19937 &mt){
                     break;
                 case 5:
                     dalinti_studentus(grupe, kietiakai, vargsiukai);
-                    if(!grupe.empty()){
+                    if(!kietiakai.empty()){
                         std::cout << "\nKietiakai";
                         rodyti_rezultatus(kietiakai);;
                     }
-                    if(!grupe.empty()){
+                    if(!vargsiukai.empty()){
                         std::cout << "\nVargšiukai";
                         rodyti_rezultatus(vargsiukai);
                     }
@@ -175,6 +175,12 @@ void paleisti_programa(std::mt19937 &mt){
                         spartos_analize(grupe, kietiakai, vargsiukai, failai[i]);
                     }
                     break; 
+                case 7: {
+                    grupe.clear();
+                    kietiakai.clear();
+                    vargsiukai.clear();
+                    break;
+                }   
             }
         } while(pasirinkimas != 0);
 };

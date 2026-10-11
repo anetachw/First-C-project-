@@ -66,6 +66,7 @@ void rodyti_meniu(){
     std::cout << "| 4. Generuoti testavimo failus                |\n";
     std::cout << "| 5. Padalinti studentus į dvi kategorijas     |\n";
     std::cout << "| 6. Atlikti spartos analize                   |\n";
+    std::cout << "| 7. Išvalyti studentų duomenis                |\n";
     std::cout << "| 0. Baigti darbą                              |\n";
     std::cout << "------------------------------------------------\n";
 };
