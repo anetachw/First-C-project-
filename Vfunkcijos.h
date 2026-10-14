@@ -13,6 +13,3 @@ void rusiavimasPV(std::vector<studentas> &grupe);
 void rusiavimasG(std::vector<studentas> &grupe);
 
 void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, std::vector<studentas> &vargsiukai);
-void spartos_analize(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, 
-                     std::vector<studentas> &vargsiukai, std::string failoPavadinimas, int kartojimai = 3);
-

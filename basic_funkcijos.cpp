@@ -129,3 +129,5 @@ bool failas_egzistuoja(const std::string &failoPavadinimas){
     std::ifstream f(failoPavadinimas.data());
     return f.is_open();
 };
+
+

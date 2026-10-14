@@ -149,12 +149,4 @@ void dalinti_studentus(std::list<studentas> &grupe, std::list<studentas> &kietia
             vargsiukai.splice(vargsiukai.end(), grupe, it++);
         }
     }
-
-};
-
-void spartos_analize(std::list<studentas> &grupe, std::list<studentas> &kietiakai, 
-                     std::list<studentas> &vargsiukai, std::string failoPavadinimas, int kartojimai){
-
-
-
-};
+}

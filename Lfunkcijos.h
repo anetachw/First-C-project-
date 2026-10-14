@@ -14,5 +14,3 @@ void rusiavimasPV(std::list<studentas> &grupe);
 void rusiavimasG(std::list<studentas> &grupe);
 
 void dalinti_studentus(std::list<studentas> &grupe, std::list<studentas> &kietiakai, std::list<studentas> &vargsiukai);
-void spartos_analize(std::list<studentas> &grupe, std::list<studentas> &kietiakai, 
-                     std::list<studentas> &vargsiukai, std::string failoPavadinimas, int kartojimai = 3);

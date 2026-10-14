@@ -100,6 +100,56 @@ void rusiavimo_meniu(T &grupe){
     }
 };
 
+template <typename T> 
+void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string failoPavadinimas, int kartojimai = 3){
+    std::cout << "\nAnalizuojamas failas: " << failoPavadinimas << '\n';
+    double suma_nuskaitymas = 0.0;
+    double suma_dalijimas = 0.0;
+    double suma_kietiakai = 0.0;
+    double suma_vargsiukai = 0.0;
+    
+    for (int k = 0; k < kartojimai; k++){
+        grupe.clear();
+        vargsiukai.clear();
+        kietiakai.clear();
+
+        auto start = std::chrono::high_resolution_clock::now();
+        nuskaityti_faila(grupe, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
+        rusiavimasPV(grupe);
+        auto end = std::chrono::high_resolution_clock::now();
+        suma_nuskaitymas += std::chrono::duration<double>(end - start).count();
+        
+        start = std::chrono::high_resolution_clock::now();
+        dalinti_studentus(grupe, kietiakai, vargsiukai);
+        end = std::chrono::high_resolution_clock::now();
+        suma_dalijimas += std::chrono::duration<double>(end - start).count();
+        
+        start = std::chrono::high_resolution_clock::now();
+        rasyti_i_faila(kietiakai, "kietiakai_" + (failoPavadinimas));
+        end = std::chrono::high_resolution_clock::now();
+        suma_kietiakai += std::chrono::duration<double>(end - start).count();
+        
+        start = std::chrono::high_resolution_clock::now();
+        rasyti_i_faila(vargsiukai, "vargsiukai_" + (failoPavadinimas));
+        end = std::chrono::high_resolution_clock::now();
+        suma_vargsiukai += std::chrono::duration<double>(end - start).count();
+    } 
+
+    double vid_nuskaitymas = suma_nuskaitymas / kartojimai;
+    double vid_dalijimas = suma_dalijimas / kartojimai;
+    double vid_kietiakai = suma_kietiakai / kartojimai;
+    double vid_vargsiukai = suma_vargsiukai / kartojimai;
+    double bendras_vid = vid_nuskaitymas + vid_dalijimas + vid_kietiakai + vid_vargsiukai;
+
+    std::cout << std::fixed << std::setprecision(6);
+    std::cout << "Vidutinis duomenų nuskaitymas:         " << vid_nuskaitymas << "s\n";
+    std::cout << "Vidutinis studentų dalijimas:          " << vid_dalijimas << "s\n";
+    std::cout << "Vidutinis kietiakių įrašymas į failą:  " << vid_kietiakai << "s\n";
+    std::cout << "Vidutinis vargšiukų įrašymas į failą:  " << vid_vargsiukai << "s\n";
+    std::cout << "Bendras vidutinis testo laikas:        " << bendras_vid << "s\n";
+}   
+
+
 const int failu_kiekis = 5;
 const std::array<int, failu_kiekis> failu_dydziai = {1000, 10000, 100000, 1000000, 10000000};
 const std::array<std::string, failu_kiekis> failai = {"stud1000.txt", "stud10000.txt", "stud100000.txt", "stud1000000.txt", "stud10000000.txt"};
@@ -179,6 +229,7 @@ void paleisti_programa(std::mt19937 &mt){
                     grupe.clear();
                     kietiakai.clear();
                     vargsiukai.clear();
+                    std::cout << "Studentų duomenis išvalyti";
                     break;
                 }   
             }
