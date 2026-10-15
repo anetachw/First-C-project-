@@ -101,9 +101,10 @@ void rusiavimo_meniu(T &grupe){
 };
 
 template <typename T> 
-void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string failoPavadinimas, int kartojimai = 3){
+void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string failoPavadinimas, int kartojimai = 5){
     std::cout << "\nAnalizuojamas failas: " << failoPavadinimas << '\n';
     double suma_nuskaitymas = 0.0;
+    double suma_rusiavimas = 0.0;
     double suma_dalijimas = 0.0;
     double suma_kietiakai = 0.0;
     double suma_vargsiukai = 0.0;
@@ -115,9 +116,13 @@ void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string fa
 
         auto start = std::chrono::high_resolution_clock::now();
         nuskaityti_faila(grupe, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
-        rusiavimasPV(grupe);
         auto end = std::chrono::high_resolution_clock::now();
         suma_nuskaitymas += std::chrono::duration<double>(end - start).count();
+
+        start = std::chrono::high_resolution_clock::now();
+        rusiavimasG(grupe);
+        end = std::chrono::high_resolution_clock::now();
+        suma_rusiavimas += std::chrono::duration<double>(end - start).count();
         
         start = std::chrono::high_resolution_clock::now();
         dalinti_studentus(grupe, kietiakai, vargsiukai);
@@ -136,13 +141,15 @@ void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string fa
     } 
 
     double vid_nuskaitymas = suma_nuskaitymas / kartojimai;
+    double vid_rusiavimas = suma_rusiavimas / kartojimai;
     double vid_dalijimas = suma_dalijimas / kartojimai;
     double vid_kietiakai = suma_kietiakai / kartojimai;
     double vid_vargsiukai = suma_vargsiukai / kartojimai;
-    double bendras_vid = vid_nuskaitymas + vid_dalijimas + vid_kietiakai + vid_vargsiukai;
+    double bendras_vid = vid_nuskaitymas + vid_rusiavimas + vid_dalijimas + vid_kietiakai + vid_vargsiukai;
 
     std::cout << std::fixed << std::setprecision(6);
     std::cout << "Vidutinis duomenų nuskaitymas:         " << vid_nuskaitymas << "s\n";
+    std::cout << "Vidutinis duomenų rūšiavimas:          " << vid_rusiavimas << "s\n";
     std::cout << "Vidutinis studentų dalijimas:          " << vid_dalijimas << "s\n";
     std::cout << "Vidutinis kietiakių įrašymas į failą:  " << vid_kietiakai << "s\n";
     std::cout << "Vidutinis vargšiukų įrašymas į failą:  " << vid_vargsiukai << "s\n";
