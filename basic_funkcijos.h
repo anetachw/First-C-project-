@@ -7,13 +7,12 @@
 #include <fstream> 
 #include <random>
 #include <chrono>
+#include <vector>
 
 
-double galutinis_vid(const studentas &A);
+void generuoti_faila(std::string failoPavadinimas, int stud_kiekis, int nd_kiekis, std::mt19937 &mt);
 
-double mediana(std::vector<int> paz);
-
-double galutinis_med(const studentas &A);
+bool failas_egzistuoja(const std::string &failoPavadinimas);
 
 int ar_skaicius(std::string tekstas, int min, int max);
 
@@ -21,14 +20,62 @@ void rodyti_meniu();
 
 void rodyti_konteineri();
 
-void printas(const studentas &A);
 
-void generuoti_paz(studentas &A, int count, std::mt19937 &mt);
+template <typename T>
+double galutinis_vid(const T &A){
+    if (A.paz.empty()){
+        return 0.6 * A.exam;
+    }
+    double suma = std::accumulate(A.paz.begin(), A.paz.end(), 0.0);
+    double vidurkis = suma / A.paz.size();
 
-void generuoti_faila(std::string failoPavadinimas, int stud_kiekis, int nd_kiekis, std::mt19937 &mt);
+    return 0.4 * vidurkis + 0.6 * A.exam;
+};
 
-bool failas_egzistuoja(const std::string &failoPavadinimas);
+template <typename T>
+double mediana(const T &paz) {
+    if (paz.empty()) return 0.0;
 
+    std::vector<typename T::value_type> v(paz.begin(), paz.end());
+    
+    std::sort(v.begin(), v.end());
+    size_t n = v.size();
+
+    if (n % 2 != 0) {
+        return v[n / 2];
+    } else {
+        return (v[(n - 1) / 2] + v[n / 2]) / 2.0;
+    }
+};
+
+template <typename T>
+double galutinis_med(const T &A){
+    if (A.paz.empty()){
+        return 0.6 * A.exam;
+    }
+    double med = mediana(A.paz);
+    
+    return 0.4 * med + 0.6 * A.exam;
+};
+
+template <typename T>
+void printas(const T &A){
+    std::cout << "|" << std::left << std::setw(14) << A.vardas 
+              << "|" << std::left << std::setw(16) << A.pavarde << "|"
+              << std::left << std::setw(16) << std::fixed << std::setprecision(2)<< galutinis_vid(A) << "|"
+              << std::left << std::setw(16) << std::fixed << std::setprecision(2)<< galutinis_med(A)<<  "|\n";
+};
+
+template <typename T>
+void generuoti_paz(T &A, int count, std::mt19937 &mt){
+    std::uniform_int_distribution<int> dist(1, 10);
+
+    for(int i = 1; i <= count; i++){
+        int num = dist(mt);
+        A.paz.push_back(num);
+    }
+    A.exam = dist(mt);
+};
 
 template <typename T>
 void rodyti_lentele(const T &grupe){
@@ -39,7 +86,7 @@ void rodyti_lentele(const T &grupe){
               << "|" << std::left << std::setw(16) << "Galutinis (Vid.)"
               << "|" << std::left << std::setw(16) << "Galutinis (Med.)"<< "|\n";
     std::cout << std::string(67, '-') << '\n';
-    for(const studentas &B : grupe) printas(B);
+    for(const auto &B : grupe) printas(B);
     std::cout << std::string(67, '-') << '\n';
 };
 

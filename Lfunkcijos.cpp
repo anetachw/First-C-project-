@@ -10,12 +10,11 @@
 #include <chrono>
 
 
-void rankine_ivestis(std::list<studentas> &grupe){
+void rankine_ivestis(std::list<studentasl> &grupe){
     int stud_kiekis = ar_skaicius("Įveskite studentų kiekį: ", 1, 30);
 
     for (int j=0; j < stud_kiekis; j++){
-        studentas tempStudentas;
-        tempStudentas.paz.reserve(10);
+        studentasl tempStudentas;
 
         std::cout << "Įveskite per tarpa studento vardą ir pavardę: ";
         std::cin >> tempStudentas.vardas >> tempStudentas.pavarde;
@@ -70,12 +69,12 @@ void rankine_ivestis(std::list<studentas> &grupe){
     }
 };
 
-void automatine_ivestis(std::list<studentas> &grupe, std::mt19937 &mt){
+void automatine_ivestis(std::list<studentasl> &grupe, std::mt19937 &mt){
     int stud_kiekis = ar_skaicius("Įveskite studentų kiekį: ", 1, 1000000);
     int nd_kiekis = ar_skaicius("Įveskite kiek namų darbų pažymių norite sugeneruoti: ", 1, 10); 
 
     for(int j=0; j < stud_kiekis; j++){
-        studentas tempStudentas;
+        studentasl tempStudentas;
         tempStudentas.vardas = "Vardas" + std::to_string(j + 1);
         tempStudentas.pavarde = "Pavarde" + std::to_string(j + 1);
         generuoti_paz(tempStudentas, nd_kiekis, mt);
@@ -84,7 +83,7 @@ void automatine_ivestis(std::list<studentas> &grupe, std::mt19937 &mt){
 
 };
 
-void nuskaityti_faila(std::list<studentas> &grupe, const std::string failoPavadinimas){
+void nuskaityti_faila(std::list<studentasl> &grupe, const std::string failoPavadinimas){
     std::ifstream f(failoPavadinimas, std::ios::ate);
 
     if(!f.is_open()){
@@ -105,8 +104,7 @@ void nuskaityti_faila(std::list<studentas> &grupe, const std::string failoPavadi
         ss.str(eilute);
         ss.clear();
 
-        studentas tempStudentas; 
-        tempStudentas.paz.reserve(11);
+        studentasl tempStudentas; 
         ss >> tempStudentas.vardas >> tempStudentas.pavarde;
 
         int skaicius;
@@ -125,8 +123,8 @@ void nuskaityti_faila(std::list<studentas> &grupe, const std::string failoPavadi
     f.close();
 };
 
-void rusiavimasPV(std::list<studentas> &grupe){
-    grupe.sort([](const studentas &a, const studentas &b){
+void rusiavimasPV(std::list<studentasl> &grupe){
+    grupe.sort([](const studentasl &a, const studentasl &b){
         if (a.pavarde != b.pavarde){
             return a.pavarde < b.pavarde;
         }
@@ -134,13 +132,13 @@ void rusiavimasPV(std::list<studentas> &grupe){
     });
 };
 
-void rusiavimasG(std::list<studentas> &grupe){
-    grupe.sort([](const studentas &a, const studentas &b){
+void rusiavimasG(std::list<studentasl> &grupe){
+    grupe.sort([](const studentasl &a, const studentasl &b){
             return galutinis_vid(a) > galutinis_vid(b);
     });
 };
 
-void dalinti_studentus(std::list<studentas> &grupe, std::list<studentas> &kietiakai, std::list<studentas> &vargsiukai){
+void dalinti_studentus(std::list<studentasl> &grupe, std::list<studentasl> &kietiakai, std::list<studentasl> &vargsiukai){
     for (auto it = grupe.begin(); it != grupe.end(); ){
         if (galutinis_vid(*it) >= 5.0){
             kietiakai.splice(kietiakai.end(), grupe, it++);
