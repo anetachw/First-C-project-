@@ -5,11 +5,11 @@
 #include <random>
 
 
-void rankine_ivestis(std::vector<studentas> &grupe);
-void automatine_ivestis(std::vector<studentas> &grupe, std::mt19937 &mt);
-void nuskaityti_faila(std::vector<studentas> &grupe, const std::string failoPavadinimas);
+void rankine_ivestis(std::vector<studentasv> &grupe);
+void automatine_ivestis(std::vector<studentasv> &grupe, std::mt19937 &mt);
+void nuskaityti_faila(std::vector<studentasv> &grupe, const std::string failoPavadinimas);
 
-void rusiavimasPV(std::vector<studentas> &grupe);
-void rusiavimasG(std::vector<studentas> &grupe);
+void rusiavimasPV(std::vector<studentasv> &grupe);
+void rusiavimasG(std::vector<studentasv> &grupe);
 
-void dalinti_studentus(std::vector<studentas> &grupe, std::vector<studentas> &kietiakai, std::vector<studentas> &vargsiukai);
+void dalinti_studentus(std::vector<studentasv> &grupe, std::vector<studentasv> &kietiakai, std::vector<studentasv> &vargsiukai);

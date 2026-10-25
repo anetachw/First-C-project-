@@ -16,9 +16,9 @@ int main(){
     int konteineris = ar_skaicius("\nPasirinkite konteinerį (1-2): ", 1, 2);
     
     if (konteineris == 1){
-        paleisti_programa<std::vector<studentas>>(mt);
+        paleisti_programa<std::vector<studentasv>>(mt);
     }
     else if (konteineris == 2){
-        paleisti_programa<std::list<studentas>>(mt);
+        paleisti_programa<std::list<studentasl>>(mt);
     }
 }

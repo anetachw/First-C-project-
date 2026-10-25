@@ -6,11 +6,11 @@
 #include <random>
 
 
-void rankine_ivestis(std::list<studentas> &grupe);
-void automatine_ivestis(std::list<studentas> &grupe, std::mt19937 &mt);
-void nuskaityti_faila(std::list<studentas> &grupe, const std::string failoPavadinimas);
+void rankine_ivestis(std::list<studentasl> &grupe);
+void automatine_ivestis(std::list<studentasl> &grupe, std::mt19937 &mt);
+void nuskaityti_faila(std::list<studentasl> &grupe, const std::string failoPavadinimas);
 
-void rusiavimasPV(std::list<studentas> &grupe);
-void rusiavimasG(std::list<studentas> &grupe);
+void rusiavimasPV(std::list<studentasl> &grupe);
+void rusiavimasG(std::list<studentasl> &grupe);
 
-void dalinti_studentus(std::list<studentas> &grupe, std::list<studentas> &kietiakai, std::list<studentas> &vargsiukai);
+void dalinti_studentus(std::list<studentasl> &grupe, std::list<studentasl> &kietiakai, std::list<studentasl> &vargsiukai);
