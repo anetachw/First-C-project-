@@ -18,3 +18,4 @@ void rusiavimasG(std::list<studentasl> &grupe);
 
 void dalinti_studentus1(std::list<studentasl> &grupe, std::list<studentasl> &kietiakai, std::list<studentasl> &vargsiukai);
 
+void dalinti_studentus2(std::list<studentasl> &grupe, std::list<studentasl> &vargsiukai);

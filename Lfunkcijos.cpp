@@ -145,5 +145,13 @@ void dalinti_studentus1(std::list<studentasl> &grupe, std::list<studentasl> &kie
 
     kietiakai.assign(grupe.begin(), atrinkti);
     vargsiukai.assign(atrinkti, grupe.end());
-}
+};
 
+void dalinti_studentus2(std::list<studentasl> &grupe, std::list<studentasl> &vargsiukai){
+    auto atrinkti = std::stable_partition(grupe.begin(), grupe.end(), [](const studentasl &s) {
+        return galutinis_vid(s) >= 5.0;
+    });
+
+    vargsiukai.assign(atrinkti, grupe.end());
+    grupe.erase(atrinkti, grupe.end());
+}
