@@ -148,7 +148,7 @@ void rusiavimo_meniu(T &grupe){
 };
 
 template <typename T> 
-void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string failoPavadinimas, int kartojimai = 5){
+void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string failoPavadinimas, int kartojimai = 3){
     std::cout << "\nAnalizuojamas failas: " << failoPavadinimas << '\n';
     double suma_nuskaitymas = 0.0;
     double suma_rusiavimas = 0.0;
@@ -172,7 +172,7 @@ void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string fa
         suma_rusiavimas += std::chrono::duration<double>(end - start).count();
         
         start = std::chrono::high_resolution_clock::now();
-        dalinti_studentus(grupe, kietiakai, vargsiukai);
+        dalinti_studentus1(grupe, kietiakai, vargsiukai);
         end = std::chrono::high_resolution_clock::now();
         suma_dalijimas += std::chrono::duration<double>(end - start).count();
         
@@ -201,7 +201,7 @@ void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string fa
     std::cout << "Vidutinis kietiakių įrašymas į failą:  " << vid_kietiakai << "s\n";
     std::cout << "Vidutinis vargšiukų įrašymas į failą:  " << vid_vargsiukai << "s\n";
     std::cout << "Bendras vidutinis testo laikas:        " << bendras_vid << "s\n";
-}   
+};
 
 
 const int failu_kiekis = 5;

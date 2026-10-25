@@ -144,7 +144,7 @@ void rusiavimasG(std::vector<studentasv> &grupe){
     });
 };
 
-void dalinti_studentus(std::vector<studentasv> &grupe, std::vector<studentasv> &kietiakai, std::vector<studentasv> &vargsiukai){
+void dalinti_studentus1(std::vector<studentasv> &grupe, std::vector<studentasv> &kietiakai, std::vector<studentasv> &vargsiukai){
 auto atrinkti = std::stable_partition(grupe.begin(), grupe.end(), [](const studentasv &s) {
         return galutinis_vid(s) >= 5.0;
     });
