@@ -156,3 +156,12 @@ auto atrinkti = std::stable_partition(grupe.begin(), grupe.end(), [](const stude
     vargsiukai.assign(atrinkti, grupe.end());
 };
 
+void dalinti_studentus2(std::vector<studentasv> &grupe, std::vector<studentasv> &vargsiukai){
+    auto atrinkti = std::stable_partition(grupe.begin(), grupe.end(), [](const studentasv &s) {
+        return galutinis_vid(s) >= 5.0;
+    });
+
+    vargsiukai.reserve(grupe.size() / 2);
+    vargsiukai.assign(atrinkti, grupe.end());
+    grupe.erase(atrinkti, grupe.end());
+};
