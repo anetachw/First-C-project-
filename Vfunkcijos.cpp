@@ -165,3 +165,14 @@ void dalinti_studentus2(std::vector<studentasv> &grupe, std::vector<studentasv> 
     vargsiukai.assign(atrinkti, grupe.end());
     grupe.erase(atrinkti, grupe.end());
 };
+
+void dalinti_studentus3(std::vector<studentasv> &grupe, std::vector<studentasv> &vargsiukai){
+      auto atrinkti = std::stable_partition(grupe.begin(), grupe.end(), [](const studentasv &s) {
+        return galutinis_vid(s) >= 5.0;
+    });
+
+    vargsiukai.reserve(grupe.size() / 2);
+    vargsiukai.assign(std::make_move_iterator(atrinkti), std::make_move_iterator(grupe.end()));
+    grupe.erase(atrinkti, grupe.end());
+};
+
