@@ -204,47 +204,57 @@ void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string fa
 };
 
 
-template <typename T>
-void dalijimo_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string failoPavadinimas, int kartojimai = 1){
+template <typename T> 
+void dalijimo_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string failoPavadinimas, int kartojimai = 3){
     std::cout << "\nAnalizuojamas failas: " << failoPavadinimas << '\n';
     double suma_dalijimas1 = 0.0;
     double suma_dalijimas2 = 0.0;
+    double suma_dalijimas3 = 0.0;
 
     for (int k = 0; k < kartojimai; k++){
-        grupe.clear();
+        T grupe_kopija;
+        nuskaityti_faila(grupe_kopija, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
+        rusiavimasG(grupe_kopija);
+
+        grupe = grupe_kopija;
         vargsiukai.clear();
         kietiakai.clear();
 
-        nuskaityti_faila(grupe, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
-        rusiavimasG(grupe);
-        
         auto start = std::chrono::high_resolution_clock::now();
         dalinti_studentus1(grupe, kietiakai, vargsiukai);
         auto end = std::chrono::high_resolution_clock::now();
         suma_dalijimas1 += std::chrono::duration<double>(end - start).count();
-        
-        nuskaityti_faila(grupe, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
-        rusiavimasG(grupe);
 
-        grupe.clear();
+
+        grupe = grupe_kopija;
         vargsiukai.clear();
         kietiakai.clear();
-
-        nuskaityti_faila(grupe, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
-        rusiavimasG(grupe);
 
         start = std::chrono::high_resolution_clock::now();
         dalinti_studentus2(grupe, vargsiukai);
         end = std::chrono::high_resolution_clock::now();
         suma_dalijimas2 += std::chrono::duration<double>(end - start).count();
+
+
+        grupe = grupe_kopija;
+        vargsiukai.clear();
+        kietiakai.clear();
+
+        start = std::chrono::high_resolution_clock::now();
+        dalinti_studentus3(grupe, vargsiukai);
+        end = std::chrono::high_resolution_clock::now();
+        suma_dalijimas3 += std::chrono::duration<double>(end - start).count();
     }
 
         double vid_dalijimas1 = suma_dalijimas1 / kartojimai;
         double vid_dalijimas2 = suma_dalijimas2 / kartojimai;
+        double vid_dalijimas3 = suma_dalijimas3 / kartojimai;
 
         std::cout << std::fixed << std::setprecision(6);
-        std::cout << "Vidutinis studentų dalijimas1:          " << vid_dalijimas1 << "s\n";
-        std::cout << "Vidutinis studentų dalijimas2:          " << vid_dalijimas2 << "s\n";
+        std::cout << "Vidutinis studentų dalijimas 1:          " << vid_dalijimas1 << "s\n";
+        std::cout << "Vidutinis studentų dalijimas 2:          " << vid_dalijimas2 << "s\n";
+        std::cout << "Vidutinis studentų dalijimas 3:          " << vid_dalijimas3 << "s\n";
+
 };
 
 
