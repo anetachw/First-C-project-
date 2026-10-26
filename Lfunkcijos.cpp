@@ -154,4 +154,15 @@ void dalinti_studentus2(std::list<studentasl> &grupe, std::list<studentasl> &var
 
     vargsiukai.assign(atrinkti, grupe.end());
     grupe.erase(atrinkti, grupe.end());
-}
+};
+
+void dalinti_studentus3(std::list<studentasl> &grupe, std::list<studentasl> &vargsiukai){
+   for (auto it = grupe.begin(); it != grupe.end(); ){
+        if (galutinis_vid(*it) < 5.0){
+            vargsiukai.splice(vargsiukai.end(), grupe, it++);
+        }
+        else {
+            ++it;
+        }
+    }
+}; 
