@@ -204,6 +204,50 @@ void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string fa
 };
 
 
+template <typename T>
+void dalijimo_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string failoPavadinimas, int kartojimai = 1){
+    std::cout << "\nAnalizuojamas failas: " << failoPavadinimas << '\n';
+    double suma_dalijimas1 = 0.0;
+    double suma_dalijimas2 = 0.0;
+
+    for (int k = 0; k < kartojimai; k++){
+        grupe.clear();
+        vargsiukai.clear();
+        kietiakai.clear();
+
+        nuskaityti_faila(grupe, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
+        rusiavimasG(grupe);
+        
+        auto start = std::chrono::high_resolution_clock::now();
+        dalinti_studentus1(grupe, kietiakai, vargsiukai);
+        auto end = std::chrono::high_resolution_clock::now();
+        suma_dalijimas1 += std::chrono::duration<double>(end - start).count();
+        
+        nuskaityti_faila(grupe, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
+        rusiavimasG(grupe);
+
+        grupe.clear();
+        vargsiukai.clear();
+        kietiakai.clear();
+
+        nuskaityti_faila(grupe, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
+        rusiavimasG(grupe);
+
+        start = std::chrono::high_resolution_clock::now();
+        dalinti_studentus2(grupe, vargsiukai);
+        end = std::chrono::high_resolution_clock::now();
+        suma_dalijimas2 += std::chrono::duration<double>(end - start).count();
+    }
+
+        double vid_dalijimas1 = suma_dalijimas1 / kartojimai;
+        double vid_dalijimas2 = suma_dalijimas2 / kartojimai;
+
+        std::cout << std::fixed << std::setprecision(6);
+        std::cout << "Vidutinis studentų dalijimas1:          " << vid_dalijimas1 << "s\n";
+        std::cout << "Vidutinis studentų dalijimas2:          " << vid_dalijimas2 << "s\n";
+};
+
+
 const int failu_kiekis = 5;
 const std::array<int, failu_kiekis> failu_dydziai = {1000, 10000, 100000, 1000000, 10000000};
 const std::array<std::string, failu_kiekis> failai = {"stud1000.txt", "stud10000.txt", "stud100000.txt", "stud1000000.txt", "stud10000000.txt"};
@@ -217,7 +261,7 @@ void paleisti_programa(std::mt19937 &mt){
     int pasirinkimas;
         do{
             rodyti_meniu();
-            pasirinkimas = ar_skaicius("\nPasirinkite veiksma (0-7): ", 0, 7);
+            pasirinkimas = ar_skaicius("\nPasirinkite veiksma (0-8): ", 0, 8);
 
             switch(pasirinkimas){
                 case 0: 
@@ -263,7 +307,7 @@ void paleisti_programa(std::mt19937 &mt){
                     } 
                     break;
                 case 5:
-                    dalinti_studentus(grupe, kietiakai, vargsiukai);
+                    dalinti_studentus1(grupe, kietiakai, vargsiukai);
                     if(!kietiakai.empty()){
                         std::cout << "\nKietiakai";
                         rodyti_rezultatus(kietiakai);;
@@ -279,7 +323,13 @@ void paleisti_programa(std::mt19937 &mt){
                         spartos_analize(grupe, kietiakai, vargsiukai, failai[i]);
                     }
                     break; 
-                case 7: {
+                case 7:
+                    std::cout << "\nDalijimo analizė:";
+                    for (int i = 0; i < failu_kiekis; i++){
+                        dalijimo_analize(grupe, kietiakai, vargsiukai, failai[i]);
+                    }
+                    break; 
+                case 8: {
                     grupe.clear();
                     kietiakai.clear();
                     vargsiukai.clear();
