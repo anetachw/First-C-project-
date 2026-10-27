@@ -172,12 +172,12 @@ void spartos_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string fa
         suma_rusiavimas += std::chrono::duration<double>(end - start).count();
         
         start = std::chrono::high_resolution_clock::now();
-        dalinti_studentus1(grupe, kietiakai, vargsiukai);
+        dalinti_studentus3(grupe, vargsiukai);
         end = std::chrono::high_resolution_clock::now();
         suma_dalijimas += std::chrono::duration<double>(end - start).count();
         
         start = std::chrono::high_resolution_clock::now();
-        rasyti_i_faila(kietiakai, "kietiakai_" + (failoPavadinimas));
+        rasyti_i_faila(grupe, "kietiakai_" + (failoPavadinimas));
         end = std::chrono::high_resolution_clock::now();
         suma_kietiakai += std::chrono::duration<double>(end - start).count();
         
