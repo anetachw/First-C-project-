@@ -211,11 +211,11 @@ void dalijimo_analize(T &grupe, T &kietiakai, T &vargsiukai, const std::string f
     double suma_dalijimas2 = 0.0;
     double suma_dalijimas3 = 0.0;
 
-    for (int k = 0; k < kartojimai; k++){
-        T grupe_kopija;
-        nuskaityti_faila(grupe_kopija, "/Users/aneta/Documents/VU/C++/" + failoPavadinimas);
-        rusiavimasG(grupe_kopija);
+    T grupe_kopija;
+    nuskaityti_faila(grupe_kopija, failoPavadinimas);
+    rusiavimasG(grupe_kopija);
 
+    for (int k = 0; k < kartojimai; k++){
         grupe = grupe_kopija;
         vargsiukai.clear();
         kietiakai.clear();
