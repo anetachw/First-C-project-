@@ -2,7 +2,7 @@
 
 ### Įdiegimo instrukcija
 
-Prieš kompiliuojant ir paleidžiant projektą per `CMake` įsitikinkite, kad jūsų kompiuteryje yra įdiegtas C++ kompiliatorius. Jei kompilatoriaus neturite, tada teminale atlikite šiuos žingsnius:
+Prieš kompiliuojant ir paleidžiant projektą įsitikinkite, kad jūsų kompiuteryje yra įdiegtas C++ kompiliatorius bei CMake (version 3.10) įrankiai. Jei neturite kompilatoriaus, teminale atlikite šiuos žingsnius:
 
 - **Windows:**
   `winget install WinLibs.MinGW`
@@ -14,25 +14,45 @@ Prieš kompiliuojant ir paleidžiant projektą per `CMake` įsitikinkite, kad j�
 - **macOS:**
   `xcode-select --install`
 
- Sėkmingai įdegus kompilatorių galite pereiti prie programos paleidimo. Terminale atlikite tolimesnius žingsnius:
+Jei neturite CMake, teminale atlikite šiuos žingsnius:
+- **Windows:**
+  `winget install Kitware.CMake`
 
-1. **Sukurkite ir atidarykite laikinąją direktoriją:**
+- **Linux:**
+  `sudo apt update`
+  `sudo apt install cmake`
+
+- **macOS:**
+  `brew install cmake`
+
+Kad įsitikinti ar jūsų Cmake yra atinkamos versijos terminale įrašykite:
+`cmake --version`
+
+<br>
+
+ Sėkmingai įdegus kompilatorių ir CMake galite pereiti prie programos paleidimo. Terminale atlikite tolimesnius žingsnius:
+1. **Pereikite į atsiųsto projekto aplanką:**
+```
+    cd Path/To/StudentuValdymoSistema
+```
+
+2. **Sukurkite ir atidarykite laikinąją direktoriją:**
 ```
     mkdir build
     cd build
 ```
 
-2. **Sugeneruokite projekto failus per CMake:**
+3. **Sugeneruokite projekto failus per CMake (naudojant Release režimą):**
 ```
-    cmake ..
+    cmake -DCMAKE_BUILD_TYPE=Release ..
 ```
 
-3. **Sukompiliuokite projektą:**
+4. **Sukompiliuokite projektą:**
 ```
     cmake --build .
 ```
 
-4. **Paleiskite sugeneruotą programą:**
+5. **Paleiskite sugeneruotą programą:**
     - **Linux / macOS sistemose:** `./studentu_programa`
     - **Windows sistemoje:** `studentu_programa.exe`
 
@@ -55,7 +75,6 @@ Paleidus programą, terminale bus pateikiamas interaktyvus meniu. Programos ei
     - **`7`** – Atlikti studentų dalijimo strategijų greičio analizę.
     - **`8`** – Išvalyti esamus studentų duomenis atmintyje.
     - **`0`** – Išeiti iš programos.
-
 
 ---
 ### Versija v0.1 (pradinė realizacija)
@@ -88,31 +107,60 @@ Pirmoji studentų valdymo programos versija orientuota į duomenų apdorojimą 
 ---
 
 ### Versija v0.3 
-Versijoje v0.3 pagrindinis dėmesys skirtas std::vector ir std::list konteinerių palyginimui ir spartos testavimui.
+Versijoje v0.3 pagrindinis dėmesys skirtas `std::vector` ir `std::list` konteinerių palyginimui ir spartos testavimui.
 #### Pagrindiniai releaso ypatumai:
-- **Konteinerio pasirinkimas:** Įdiegta galimybė pasirinkti tarp std::vector ir std::list struktūrų;
-- **Funkcijų pritaikymas:** Galimos programos funkcijos pakeistos į šablonines, kitos papildomai perrašytos, kad veiktų su std::list struktūra.
+- **Konteinerio pasirinkimas:** Įdiegta galimybė pasirinkti tarp `std::vector` ir `std::list` struktūrų;
+- **Funkcijų pritaikymas:** Galimos programos funkcijos pakeistos į šablonines, kitos papildomai perrašytos, kad veiktų su `std::list` struktūra.
 
 ---
 
 ### Versija v0.3.1 
-**Pagrindinis versijos patobulinimas:** Dirbant su std::list studento struktūra pažymius irgi saugo std::list konteineryje, ne std::vector kaip tai buvo v0.3 versijos atveju. 
+**Pagrindinis versijos patobulinimas:** Dirbant su `std::list` studento struktūra pažymius irgi saugo `std::list` konteineryje, ne `std::vector` kaip tai buvo v0.3 versijos atveju. 
 
 ---
 
 ### Versija v1.0 
 #### Pagrindiniai releaso ypatumai:
+- **Dalijimo strategijos:**
+    - **1 strategija:** Studentų konteinerio skaidymas į du naujus to paties tipo konteinerius "vargšiukės" ir "kietiakus". Tokiu būdu tas pats stundetas yra dviejuose konteineriuose: pagrindiniame ir vienam iš suskaidytų.
+    - **2 strategija:** Studentų skaidymas panaudojant tik vieną naują konteinerį "vargšiukai". Perkelti į naują konteinerį studentai yra ištrinami iš pagrindinio, kuriame lieka tik "kietiakai".
+    - **3 strategija:** Studentų skaidymas remiantis 2 strategija su patobulinimais. Dirbant su std::vector konteineriu naudojamas `std::stable_partition` ir `std::make_move_iterator`, o su `std::list` naudojamas `splice()`. 
 
 
+#### Dalijimo strategiju palyginimo rezultatai:
+**std::vector**
+|Failas|Studentų skaičius|Dalijimas 1|Dalijimas 2|Dalijimas 3|
+|---|---|---|---|---|
+|stud1000.txt|1 000|0.000085s|0.000043s|0.000018s|
+|stud10000.txt|10 000|0.000291s|0.000192s|0.000069s|
+|stud100000.txt|100 000|0.002971s|0.001345s|0.000546s|
+|stud1000000.txt|1 000 000|0.025115s|0.014179s|0.005826s|
+|stud10000000.txt|10 000 000|0.860139s|0.515829s|0.244038s|
+
+<img width="328" height="366" alt="image" src="https://github.com/user-attachments/assets/375465ce-c318-40d7-bd16-eeed3acd0bd3" />
+
+**std::list**
+|Failas|Studentų skaičius|Dalijimas 1|Dalijimas 2|Dalijimas 3|
+|---|---|---|---|---|
+|stud1000.txt|1 000|0.000421s|0.000263s|0.000022s|
+|stud10000.txt|10 000|0.001603s|0.000978s|0.000072s|
+|stud100000.txt|100 000|0.014742s|0.010635s|0.001093s|
+|stud1000000.txt|1 000 000|0.151380s|0.101431s|0.010211s|
+|stud10000000.txt|10 000 000|9.308188s|5.369350s|3.238489s|
+
+<img width="328" height="366" alt="image" src="https://github.com/user-attachments/assets/e3ca7e7c-3afc-4713-bd29-3a97bf4d6122" />
+
+Remiantis pateiktais dalijimo analizės duomenimis 3-ioji dalijimo strategija visuose testuose pasiekė geriausius rezultatus, 2-oji strategija yra vidutiniškai greita, o 1-oji strategija reikalauja daugiausiai laiko. std::vector programos veikimo laikas visuose failų dydžiuose yra pastebimai mažesnis lyginant su std::list, o didžiausiam 10 mln studentų failui apdoroti trečiai strategijai prireikė tik apie 0.24s. Tuo tarpu std::list visi trys studentų dalijimo algoritmai veikia lėčiau, 10 mln studentų failui apdoroti trečiai strategijai prireikė net 3.23s. Tai rodo, kad std::vector konteineris yra efektyvesnis atliekant dalijimą ir užtikrina geresnę spartą nei std::list.
 
 ---
 ### Spartos analizė
-Spartos analizė atlikta dirbant su std::vector ir std::list konteineriais naudojant iš anksto sugeneruotus testinius failus. Kiekvienas testas kartotas 5 kartus, o lentelėje pateikti gautų laiko matavimų vidurkiai sekundėmis.
+Spartos analizė atlikta dirbant su `std::vector` ir `std::list` konteineriais naudojant iš anksto sugeneruotus testinius failus. Kiekvienas testas kartotas 5 kartus, o lentelėje pateikti gautų laiko matavimų vidurkiai sekundėmis.
 
 **Testavimo sistemos parametrai**
 - CPU: Apple M2
 - RAM: 8G
 - DISK: SSD
+- OPTIMIZATION LEVEL: -O3
 
 ---
 ### v0.2 rezultatai:
@@ -141,6 +189,8 @@ Atlikta spartos analizė įrodo, kad optimizuota programa pasižymi linijiniu la
 |stud1000000.txt|0.766029s|0.215568s|0.077011s|0.299067s|0.211799s|1.569475s|
 |stud10000000.txt|8.022778s|2.946046s|1.021856s|3.151983s|2.265385s|17.408047s|
 
+<img width="345" height="485" alt="image" src="https://github.com/user-attachments/assets/9d448249-dfb0-476b-aab2-6b38e1acce3b" />
+
 #### std::list
 |**failas**|**skaitymas**|**rūšiavimas**|**dalijimas**|**rašymas (kietiakai)**|**rašymas (vargšiukai)**|**bendras laikas**|
 |---|---|---|---|---|---|---|
@@ -150,20 +200,14 @@ Atlikta spartos analizė įrodo, kad optimizuota programa pasižymi linijiniu la
 |stud1000000.txt|0.777662s|0.622143s|0.118022s|0.388591s|0.281412s|2.187830s|
 |stud10000000.txt|8.135543s|9.905907s|1.168339s|3.818835s|2.745193s|25.773816s|
 
+<img width="345" height="485" alt="image" src="https://github.com/user-attachments/assets/1aa18eee-90e3-429b-8c68-301f04f50ef7" />
+
 Abiejų konteinerių atveju atlikta spartos analizė įrodo, kad optimizuota programa pasižymi linijiniu laiko sudėtingumu (O(N)): padidinus duomenų kiekį 10 kartų, apdorojimo laikas padidėja proporcingai. Didžioji dalis laiko skiriama failų skaitymo ir rašymo operacijoms bei duomenų rūšiavimui, tuo tarpu pati duomenų dalijimo operacijos atmintyje atliekamos labai greitai, net ir su 10 mln. įrašų.
 
 Lyginant konteinerių rezultatus std::vector duomenų rūšiavimo etape Pasirodė pastebimai greitesnis dirbant su dideliais kiekiais (pvz., prie 10 mln. įrašų atevju vektoriui prireikė ~2.95 s, o sąrašui ~9.91 s). Todėl dirbant su 10 mln. įrašų bendras std::vector vykdymo laikas (~17.41 s ) maždaug 1,5 karto trumpesnis lyginant su std::list ( ~25.77 s).
 
 ---
 ### v0.3.1 rezultatai:
-#### std::vector
-|**failas**|**skaitymas**|**rūšiavimas**|**dalijimas**|**rašymas (kietiakai)**|**rašymas (vargšiukai)**|**bendras laikas**|
-|---|---|---|---|---|---|---|
-|stud1000.txt|0.002402s|0.000456s|0.000060s|0.001110s|0.000900s|0.004927s|
-|stud10000.txt|0.009692s|0.001821s|0.000234s|0.003685s|0.002573s|0.018005s|
-|stud100000.txt|0.076648s|0.015290s|0.002231s|0.030013s|0.021167s|0.145349s|
-|stud1000000.txt|0.776421s|0.191490s|0.072598s|0.312569s|0.217503s|1.570582s|
-|stud10000000.txt|7.964181s|2.756484s|1.027829s|3.186503s|2.285403s|17.220399s|
 
 #### std::list
 |**failas**|**skaitymas**|**rūšiavimas**|**dalijimas**|**rašymas (kietiakai)**|**rašymas (vargšiukai)**|**bendras laikas**|
@@ -174,12 +218,35 @@ Lyginant konteinerių rezultatus std::vector duomenų rūšiavimo etape Pasirod�
 |stud1000000.txt|1.105456s|1.045772s|0.126726s|0.457583s|0.323552s|3.059089s|
 |stud10000000.txt|11.632625s|48.045776s|33.027847s|31.305997s|23.401636s|147.413882s|
 
-Atlikta spartos analizė įrodo, kad programos veikimo laikas ir efektyvumas tiesiogiai priklauso nuo pasirinkto konteinerio tipo. Dirbant su std::vector, apdorojimo laikas auga nuosekliai, tuo tarpu std::list prie 10 mln. įrašų susiduria su drastišku sulėtėjimu dėl dinaminės atminties fragmentavimo ir rodyklių sekimo.
+<img width="345" height="485" alt="image" src="https://github.com/user-attachments/assets/df29c62e-db89-4573-b35c-fd2a0858a6b5" />
 
-Lyginant konteinerių rezultatus duomenų rūšiavimo etape, std::vector pasirodė pastebimai greitesnis dirbant su dideliais kiekiais (prie 10 mln. įrašų vektoriui prireikė ~2.76 s, o sąrašui – ~48.05 s). Dar didesnis skirtumas išryškėja studentų dalijimo etape, kur vektorius užtruko vos ~1.03 s, tuo tarpu sąrašas sugaišo ~33.03 s. Todėl dirbant su 10 mln. įrašų bendras std::vector vykdymo laikas (~17.22 s) yra maždaug 8,5 karto trumpesnis lyginant su std::list (~147.41 s).
+Palyginus v0.3 ir v0.3.1 std::list realizacijas paaiškėjo, kad konteinerio vidinė sandara turi kritinę įtaką programos greičiui. Kai studentai saugomi sąraše, tačiau jų vidiniai pažymiai yra vektoriaus tipo (v0.3 std::list lentelė), programa veikia pastebimai sparčiau. Kai ir patys studentai, ir jų pažymiai yra saugomi kaip std::list (v0.3.1 std::list lentelė), dirbant su dideliais duomenų kiekiais sistema susiduria su milžinišku sulėtėjimu.
+
+Palyginus v0.3 std::vector ir v0.3.1 std::list rezultatus matome, kad dirbant su std::vector, apdorojimo laikas auga nuosekliai. Tuo tarpu std::list prie 10 mln. įrašų susiduria su drastišku sulėtėjimu dėl dinaminės atminties fragmentavimo ir rodyklių sekimo. Todėl 10 mln. įrašų atveju bendras std::vector vykdymo laikas (~17.22 s) yra maždaug 8,5 karto trumpesnis lyginant su std::list (~147.41 s).
 
 ---
 ### v1.0 rezultatai:
-#### std::vector
+#### std::vector 
+| **failas** | **skaitymas** | **rūšiavimas** | **dalijimas** | **rašymas (kietiakai)** | **rašymas (vargšiukai)** | **bendras laikas** |
+|---|---|---|---|---|---|---|
+|stud1000.txt|0.001437s|0.000371s|0.000005s|0.000421s|0.000323s|0.002558s|
+|stud10000.txt|0.007686s|0.001591s|0.000054s|0.003950s|0.002142s|0.015423s|
+|stud100000.txt|0.079053s|0.015520s|0.000759s|0.030696s|0.021396s|0.147424s|
+|stud1000000.txt|0.762898s|0.189387s|0.020536s|0.352839s|0.252865s|1.578525s|
+|stud10000000.txt|7.960285s|2.699411s|0.260887s|3.644756s|2.707295s|17.272633s|
+
+<img width="345" height="485" alt="image" src="https://github.com/user-attachments/assets/042c2ec8-b24a-4e8a-b402-97b725bd1cca" />
+
 
 #### std::list
+| **failas** | **skaitymas** | **rūšiavimas** | **dalijimas** | **rašymas (kietiakai)** | **rašymas (vargšiukai)** | **bendras laikas** |
+|---|---|---|---|---|---|---|
+|stud1000.txt|0.011973s|0.000184s|0.000010s|0.000526s|0.000344s|0.013038s|
+|stud10000.txt|0.012852s|0.002650s|0.000136s|0.003298s|0.002483s|0.021419s|
+|stud100000.txt|0.116893s|0.054418s|0.009600s|0.044759s|0.035320s|0.260990s|
+|stud1000000.txt|1.164097s|0.994149s|0.125354s|0.460706s|0.320855s|3.065162s|
+|stud10000000.txt|11.736854s|21.281563s|5.730201s|12.261700s|13.396715s|64.407032s|
+
+<img width="345" height="485" alt="image" src="https://github.com/user-attachments/assets/269d5002-4515-4183-acad-8cbc307b15a8" />
+
+Remiantis atlikta spartos analize, akivaizdu, kad duomenų konteinerio pasirinkimas turi milžinišką įtaką programos veikimo greičiui, analogiškai kaip ir v0.3 versijoje. Pritaikytos 3 strategijos dalijimo funkcijos studentų skaidymą atlieką greičiau tiek std::list, tiek std::vector atveju. 
