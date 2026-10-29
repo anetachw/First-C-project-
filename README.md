@@ -229,13 +229,13 @@ Palyginus v0.3 std::vector ir v0.3.1 std::list rezultatus matome, kad dirbant su
 #### std::vector 
 | **failas** | **skaitymas** | **rūšiavimas** | **dalijimas** | **rašymas (kietiakai)** | **rašymas (vargšiukai)** | **bendras laikas** |
 |---|---|---|---|---|---|---|
-|stud1000.txt|0.001437s|0.000371s|0.000005s|0.000421s|0.000323s|0.002558s|
-|stud10000.txt|0.007686s|0.001591s|0.000054s|0.003950s|0.002142s|0.015423s|
-|stud100000.txt|0.079053s|0.015520s|0.000759s|0.030696s|0.021396s|0.147424s|
-|stud1000000.txt|0.762898s|0.189387s|0.020536s|0.352839s|0.252865s|1.578525s|
-|stud10000000.txt|7.960285s|2.699411s|0.260887s|3.644756s|2.707295s|17.272633s|
+|stud1000.txt| 0.018868s | 0.000491s | 0.000025s | 0.001299s | 0.000824s | 0.021508s |
+| stud10000.txt| 0.012354s | 0.002227s | 0.000088s | 0.004566s | 0.002904s | 0.022140s |
+| stud100000.txt | 0.076803s | 0.015032s | 0.000637s | 0.031475s | 0.022170s | 0.146117s |
+| stud1000000.txt| 0.735225s | 0.181939s | 0.019152s | 0.342468s | 0.241272s | 1.520057s |
+| stud10000000.txt| 7.724468s | 2.815931s | 0.259692s | 3.539078s | 2.571959s | 16.911129s |
 
-<img width="345" height="485" alt="image" src="https://github.com/user-attachments/assets/042c2ec8-b24a-4e8a-b402-97b725bd1cca" />
+<img width="345" height="485" alt="image" src="https://github.com/user-attachments/assets/ffc8c342-7da2-4c48-8b59-2d97b56ce264" />
 
 
 #### std::list
