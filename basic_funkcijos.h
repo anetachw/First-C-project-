@@ -309,7 +309,8 @@ void paleisti_programa(std::mt19937 &mt){
                                 generuoti_faila(failai[i], failu_dydziai[i], 10, mt);
                                 auto end = std::chrono::high_resolution_clock::now();
                                 std::chrono::duration<double> f_sukurimas = end - start;
-                                std::cout << "Failo " << failai[i] << " generavimo laikas: " << f_sukurimas.count() << "s.\n";
+                                std::cout << std::fixed << std::setprecision(6);
+                                std::cout << "Failo " << failai[i] << " generavimo laikas: " <<   f_sukurimas.count() << "s.\n";
                             } else{
                                 std::cout << "Failas " << failai[i] << " jau egzistuoja.\n";
                             }
