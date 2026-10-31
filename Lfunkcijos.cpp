@@ -139,25 +139,31 @@ void rusiavimasG(std::list<studentasl> &grupe){
 };
 
 void dalinti_studentus1(std::list<studentasl> &grupe, std::list<studentasl> &kietiakai, std::list<studentasl> &vargsiukai){
-    auto atrinkti = std::stable_partition(grupe.begin(), grupe.end(), [](const studentasl &s) {
-        return galutinis_vid(s) >= 5.0;
-    });
-
-    kietiakai.assign(grupe.begin(), atrinkti);
-    vargsiukai.assign(atrinkti, grupe.end());
-};
-
+    for (auto it = grupe.begin(); it != grupe.end(); it++){
+        if (galutinis_vid(*it) >= 5.0){
+            kietiakai.push_back(*it);
+        }
+        else {
+            vargsiukai.push_back(*it);
+        }
+    }
+}; 
 void dalinti_studentus2(std::list<studentasl> &grupe, std::list<studentasl> &vargsiukai){
-    auto atrinkti = std::stable_partition(grupe.begin(), grupe.end(), [](const studentasl &s) {
-        return galutinis_vid(s) >= 5.0;
-    });
+    for (auto it = grupe.end(); it != grupe.begin(); ){
+        --it;
 
-    vargsiukai.assign(atrinkti, grupe.end());
-    grupe.erase(atrinkti, grupe.end());
+        if (galutinis_vid(*it) < 5.0){
+            vargsiukai.push_back(*it);
+            it = grupe.erase(it);
+        }
+        else { 
+          continue;
+        }
+    }
 };
 
 void dalinti_studentus3(std::list<studentasl> &grupe, std::list<studentasl> &vargsiukai){
-   for (auto it = grupe.begin(); it != grupe.end(); ){
+    for (auto it = grupe.begin(); it != grupe.end(); ){
         if (galutinis_vid(*it) < 5.0){
             vargsiukai.splice(vargsiukai.end(), grupe, it++);
         }
