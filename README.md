@@ -131,26 +131,27 @@ Versijoje v0.3 pagrindinis dėmesys skirtas `std::vector` ir `std::list` kontein
 **std::vector**
 |Failas|Studentų skaičius|Dalijimas 1|Dalijimas 2|Dalijimas 3|
 |---|---|---|---|---|
-|stud1000.txt|1 000|0.000085s|0.000043s|0.000018s|
-|stud10000.txt|10 000|0.000291s|0.000192s|0.000069s|
-|stud100000.txt|100 000|0.002971s|0.001345s|0.000546s|
-|stud1000000.txt|1 000 000|0.025115s|0.014179s|0.005826s|
-|stud10000000.txt|10 000 000|0.860139s|0.515829s|0.244038s|
+|stud1000.txt|1 000|0.000060s|0.000039s|0.000015s|
+|stud10000.txt|10 000|0.000349s|0.000217s|0.000083s|
+|stud100000.txt|100 000|0.002078s|0.001341s|0.000530s|
+|stud1000000.txt|1 000 000|0.022547s|0.013104s|0.007603s|
+|stud10000000.txt|10 000 000|0.548313s|0.316920s|0.156896s|
 
-<img width="328" height="366" alt="image" src="https://github.com/user-attachments/assets/375465ce-c318-40d7-bd16-eeed3acd0bd3" />
+<img width="328" height="366" alt="image" src="https://github.com/user-attachments/assets/6fd90110-cdba-4af5-bef6-0a729ac8eaf3" />
+
 
 **std::list**
 |Failas|Studentų skaičius|Dalijimas 1|Dalijimas 2|Dalijimas 3|
 |---|---|---|---|---|
-|stud1000.txt|1 000|0.000421s|0.000263s|0.000022s|
-|stud10000.txt|10 000|0.001603s|0.000978s|0.000072s|
-|stud100000.txt|100 000|0.014742s|0.010635s|0.001093s|
-|stud1000000.txt|1 000 000|0.151380s|0.101431s|0.010211s|
-|stud10000000.txt|10 000 000|9.308188s|5.369350s|3.238489s|
+|stud1000.txt|1 000|0.000398s|0.000304s|0.000028s|
+|stud10000.txt|10 000|0.001779s|0.001250s|0.000088s|
+|stud100000.txt|100 000|0.013130s|0.009751s|0.000889s|
+|stud1000000.txt|1 000 000|0.129949s|0.094399s|0.008055s|
+|stud10000000.txt|10 000 000|14.145700s|6.419680s|3.673708s|
 
-<img width="328" height="366" alt="image" src="https://github.com/user-attachments/assets/e3ca7e7c-3afc-4713-bd29-3a97bf4d6122" />
+<img width="328" height="366" alt="image" src="https://github.com/user-attachments/assets/31289c74-0255-467e-bdb8-6b7bc82de504" />
 
-Remiantis pateiktais dalijimo analizės duomenimis 3-ioji dalijimo strategija visuose testuose pasiekė geriausius rezultatus, 2-oji strategija yra vidutiniškai greita, o 1-oji strategija reikalauja daugiausiai laiko. std::vector programos veikimo laikas visuose failų dydžiuose yra pastebimai mažesnis lyginant su std::list, o didžiausiam 10 mln studentų failui apdoroti trečiai strategijai prireikė tik apie 0.24s. Tuo tarpu std::list visi trys studentų dalijimo algoritmai veikia lėčiau, 10 mln studentų failui apdoroti trečiai strategijai prireikė net 3.23s. Tai rodo, kad std::vector konteineris yra efektyvesnis atliekant dalijimą ir užtikrina geresnę spartą nei std::list.
+Analizuojant `std::vector` ir `std::list` konteinerių veikimo spartą pastebimi ryškūs skirtumai, kurie labiausiai išryškėja apdorojant didesnius duomenų kiekius. Mažesniems failams (stud1000.txt ir stud10000.txt) laiko sąnaudos tarp abiejų variantų skiriasi nežymiai ir visų trijų dalijimo strategijų trukmė išlieka milisekundžių ribose. Tačiau didėjant studentų skaičiui iki 10 000 000, `std::vector` konteineris pademonstravo geresnį efektyvumą: jame pirmasis dalijimas užtruko apie 0.55 s, o antrasis – 0.32 s, tuo tarpu `std::list` konteineryje šie procesai reikalavo atitinkamai net 14.15 s ir 6.42 s. Trečiasis dalijimas abu kartus išliko greičiausias ir efektyviausias, tačiau pirmame konteineryje jis taip pat atliktas pastebimai sparčiau (0.16 s lyginant su 3.67 s).
 
 ---
 ### Spartos analizė
@@ -226,6 +227,7 @@ Palyginus v0.3 std::vector ir v0.3.1 std::list rezultatus matome, kad dirbant su
 
 ---
 ### v1.0 rezultatai:
+Spartos analizėje studentų dalijimui panaudota greičiausia 3 dalijimo strategija. 
 #### std::vector 
 | **failas** | **skaitymas** | **rūšiavimas** | **dalijimas** | **rašymas (kietiakai)** | **rašymas (vargšiukai)** | **bendras laikas** |
 |---|---|---|---|---|---|---|
